@@ -30,7 +30,7 @@ A single dropdown reskins the entire page — colors, fonts, the decorative ring
 ![Arcane Theme](assets/arcane.png)
 ![Contraption Theme](assets/contraption.png)
 ![Sci-fi Theme](assets/sci-fi.png)
-![Wildgrowth Theme](assets/wildgrowth.png)
+![Wildgrove Theme](assets/wildgrove.png)
 
 **Advanced panel**
 - **Score multiplier** — scale the total (crit damage, etc.)
