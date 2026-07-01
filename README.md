@@ -1,5 +1,7 @@
 # 🎲 Dicey
 
+**[▶ Try it live](https://zoutbot-cpu.github.io/Dicey/)**
+
 A single-file, fully 3D dice roller for tabletop campaigns. No build step, no npm install, no backend — open one HTML file and start rolling.
 
 Built for D&D and other tabletop games that want more than a flat number: real polyhedral geometry, a pot system for queuing up a handful of dice at once, and four full visual themes so the roller can match your campaign's vibe.
@@ -24,14 +26,11 @@ Queue up any mix of dice — 3d6 and a d20, or seventeen d4s, whatever the momen
 **Themes**
 A single dropdown reskins the entire page — colors, fonts, the decorative ring artwork, scene lighting, die material finish, and even the UI copy:
 
-| Theme | Vibe |
-|---|---|
-| Arcane Circle | Mystical violet-and-gold casting circle |
-| Steampunk Contraption | Brass, copper, gears, rivets |
-| Sci-Fi Bay | Neon cyan HUD with glossy emissive dice |
-| Wild Grove | Mossy greens, matte dice, leaf-flecked ring |
-
-Dice already on the table keep their old look when you switch themes — only future casts pick up the new style.
+| Theme | 
+![Arcane Theme](assets/arcane.png)
+![Contraption Theme](assets/contraption.png)
+![Sci-fi Theme](assets/sci-fi.png)
+![Wildgrowth Theme](assets/wildgrowth.png)
 
 **Advanced panel**
 - **Score multiplier** — scale the total (crit damage, etc.)
@@ -53,13 +52,6 @@ open dice-circle.html
 - **Face numbering** uses a generic opposite-face-pairing algorithm (labels sum to N+1 across opposite faces, matching real dice conventions) — it works for any face count the geometry produces, including odd counts.
 - **Rolling** picks a target face up front, computes the quaternion that puts it "up," and animates toward it — so the die always lands on a value that was actually decided by the dice pool, not the animation.
 - **No frameworks.** Vanilla JS, CSS custom properties for theming, and three.js (r128) loaded from a CDN. Everything lives in one `.html` file.
-
-## Roadmap ideas
-
-- More specialized/novelty dice (Fudge dice, coin flips, etc.)
-- Saved/named dice pools for quick re-rolling
-- Roll history log
-
 ## License
 
 MIT — do whatever you want with it.
