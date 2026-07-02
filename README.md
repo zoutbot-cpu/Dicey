@@ -39,10 +39,10 @@ A single dropdown reskins the entire page — colors, fonts, the decorative ring
 
 ## Usage
 
-There's nothing to install. Download `dice-circle.html` and open it in any modern browser, or host it on any static file server (GitHub Pages, Netlify, a folder on a USB stick — anything that serves HTML works).
+There's nothing to install. Download `index.html` and open it in any modern browser, or host it on any static file server (GitHub Pages, Netlify, a folder on a USB stick — anything that serves HTML works).
 
 ```bash
-open dice-circle.html
+open index.html
 # or just double-click it
 ```
 
