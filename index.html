@@ -521,7 +521,7 @@
   <div class="names-panel" id="namesPanel" hidden>
     <label for="namesInput" class="theme-label">Name the Faces</label>
     <textarea id="namesInput" rows="2" placeholder="Alice, Bob, Charlie, Dana…"></textarea>
-    <div class="names-hint" id="namesHint">Add names to replace numbers in the reading.</div>
+    <div class="names-hint" id="namesHint">Add at least four names, then draw.</div>
   </div>
 
   <div class="masthead">
@@ -961,10 +961,11 @@
     var group = new THREE.Group();
 
     var matCfg = THEMES[currentTheme].material;
+    var dieColor = dieColorNum(typeKey);
     var bodyMat = new THREE.MeshPhysicalMaterial({
-      color: cfg.color, metalness:matCfg.metalness, roughness:matCfg.roughness,
+      color: dieColor, metalness:matCfg.metalness, roughness:matCfg.roughness,
       clearcoat:matCfg.clearcoat, clearcoatRoughness:matCfg.clearcoatRoughness,
-      emissive: cfg.color, emissiveIntensity:matCfg.emissiveIntensity,
+      emissive: dieColor, emissiveIntensity:matCfg.emissiveIntensity,
       side: THREE.DoubleSide
     });
     var bodyMesh = new THREE.Mesh(data.geometry, bodyMat);
@@ -973,7 +974,7 @@
     var labelSize = getLabelSize(typeKey, cfg.sides);
     data.faces.forEach(function(f){
       var disp = String(f.value);
-      var tex = getNumberTexture(disp, cfg.hex);
+      var tex = getNumberTexture(disp, dieColorHex(typeKey));
       var mat = new THREE.MeshBasicMaterial({ map: tex, transparent:true, depthWrite:false });
       var plane = new THREE.Mesh(new THREE.PlaneGeometry(labelSize, labelSize), mat);
       var p = f.centroid.clone().add(f.normal.clone().multiplyScalar(0.02));
@@ -1185,7 +1186,7 @@
       var cfg = DIE_TYPES[typeKey];
       var wrap = document.createElement('div');
       wrap.className = 'ledger-group';
-      wrap.style.setProperty('--group-color', cfg.hex);
+      wrap.style.setProperty('--group-color', dieColorHex(typeKey));
       var h3 = document.createElement('h3');
       h3.textContent = cfg.label + ' \u00d7 ' + groups[typeKey].length;
       wrap.appendChild(h3);
@@ -1293,7 +1294,6 @@
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'die-btn' + (typeKey === selectedType ? ' selected' : '');
-    btn.style.setProperty('--accent', cfg.hex);
     btn.dataset.type = typeKey;
     btn.innerHTML = ICONS[typeKey] + '<span>' + cfg.label + '</span>';
     btn.addEventListener('click', function(){
@@ -1308,7 +1308,6 @@
   customBtn.className = 'die-btn custom-die-btn';
   customBtn.tabIndex = 0;
   customBtn.setAttribute('role', 'button');
-  customBtn.style.setProperty('--accent', CUSTOM_HEX);
   customBtn.innerHTML =
     '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,3 27,10 27,22 16,29 5,22 5,10" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/></svg>' +
     '<span>Custom</span>' +
@@ -1360,7 +1359,7 @@
       var cfg = DIE_TYPES[typeKey];
       var chip = document.createElement('li');
       chip.className = 'chip';
-      chip.style.setProperty('--chip-color', cfg.hex);
+      chip.style.setProperty('--chip-color', dieColorHex(typeKey));
       var span = document.createElement('span');
       span.textContent = cfg.label + ' \u00d7 ' + counts[typeKey];
       var removeBtn = document.createElement('button');
@@ -1392,6 +1391,20 @@
   document.getElementById('castBtn').addEventListener('click', castPot);
 
   /* ============ Themes ============ */
+  var THEME_DIE_COLORS = {
+    arcane:    { d4:0xc1553f, d6:0x8b6bff, d8:0x4f7fd6, d10:0x3f9d72, d12:0xd8b25c, d20:0x9457e0, d24:0xc15f95, custom:0x4fd6c0 },
+    steampunk: { d4:0xa85a2e, d6:0xc9973f, d8:0x8a6a3a, d10:0x7a8a5a, d12:0xd4af5a, d20:0x9c5a3a, d24:0xb08050, custom:0x8a9a7a },
+    scifi:     { d4:0xff5c5c, d6:0x38d6ff, d8:0x4fa8ff, d10:0x3ff2a0, d12:0xffd23f, d20:0x7b5cff, d24:0xff5ca8, custom:0x38ffe0 },
+    nature:    { d4:0xa85a3a, d6:0x5a8a4a, d8:0x4a7a8a, d10:0x7a9a4a, d12:0xc19a4a, d20:0x6a9a5a, d24:0x9a6a4a, custom:0x8ab08a }
+  };
+  function dieColorNum(typeKey){
+    var pal = THEME_DIE_COLORS[currentTheme] || THEME_DIE_COLORS.arcane;
+    return (pal[typeKey] !== undefined) ? pal[typeKey] : pal.custom;
+  }
+  function dieColorHex(typeKey){
+    return '#' + dieColorNum(typeKey).toString(16).padStart(6, '0');
+  }
+
   var THEMES = {
     arcane: {
       terms: {
@@ -1540,14 +1553,22 @@
     hemi.color.setHex(lt.hemiSky); hemi.groundColor.setHex(lt.hemiGround);
     key.color.setHex(lt.key); rim.color.setHex(lt.rim); fillLight.color.setHex(lt.fill);
 
-    // dice built under the old theme used the old material tweak; clear the cache so
+    // dice built under the old theme used the old material/color; clear the cache so
     // future casts pick up the new one (dice already on the table keep their look)
     templateCache = {};
+
+    // repaint the die-picker accents (chips/ledger are rebuilt below via renderPotList/renderLedgerGroups)
+    Array.prototype.forEach.call(dieGrid.children, function(btn){
+      var tk = btn.dataset.type;
+      if (tk) btn.style.setProperty('--accent', dieColorHex(tk));
+    });
+    customBtn.style.setProperty('--accent', dieColorHex('custom'));
 
     // ring decoration needs the freshly-applied CSS vars, so read them after the attribute swap
     requestAnimationFrame(function(){ buildRingSVG(themeKey); });
 
     renderPotList();
+    renderLedgerGroups();
   }
 
   document.getElementById('themeSelect').addEventListener('change', function(e){
@@ -1560,10 +1581,14 @@
 
   function updateNamesHint(){
     var hint = document.getElementById('namesHint');
-    hint.textContent = nameList.length
-      ? (nameList.length + ' name' + (nameList.length === 1 ? '' : 's') + ' ready.')
-      : 'Add at least two names, then draw.';
-    document.getElementById('drawBtn').disabled = nameList.length < 2;
+    if (nameList.length >= 4){
+      hint.textContent = nameList.length + ' names ready.';
+    } else if (nameList.length > 0){
+      hint.textContent = nameList.length + ' of 4 minimum \u2014 add ' + (4 - nameList.length) + ' more.';
+    } else {
+      hint.textContent = 'Add at least four names, then draw.';
+    }
+    document.getElementById('drawBtn').disabled = nameList.length < 4;
     syncDrawCountLimit();
   }
 
@@ -1608,7 +1633,7 @@
 
   /* ============ Draw the Winner (Named mode) ============ */
   function drawWinner(){
-    if (nameList.length < 2) return;
+    if (nameList.length < 4) return;
     var n = nameList.length;
     var reroll = document.getElementById('rerollDuplicatesInput').checked;
     var drawCount = Math.max(1, Math.min(50, parseInt(document.getElementById('drawCountInput').value, 10) || 1));
@@ -1697,7 +1722,7 @@
         void card.offsetWidth; // restart animation cleanly even on repeated draws
         card.classList.add('revealed');
       });
-      document.getElementById('drawBtn').disabled = (nameList.length < 2);
+      document.getElementById('drawBtn').disabled = (nameList.length < 4);
     }, maxDuration + 150);
   }
   document.getElementById('drawBtn').addEventListener('click', drawWinner);
@@ -1765,7 +1790,7 @@
   document.getElementById('multiplierInput').addEventListener('input', updateTotalDisplay);
   document.getElementById('modifierInput').addEventListener('input', updateTotalDisplay);
 
-  applyTheme('arcane');
+  applyTheme(document.getElementById('themeSelect').value || 'arcane');
   renderPotList();
 })();
 </script>
