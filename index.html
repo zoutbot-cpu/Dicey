@@ -372,6 +372,45 @@
     font-size:1.02rem;
   }
 
+  .winner-panel{ text-align:center; }
+  .winner-hint{ color:var(--muted); font-size:0.9rem; margin:-4px 0 14px; }
+  .draw-controls{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    flex-wrap:wrap; margin-bottom:14px; text-align:left;
+  }
+  .draw-controls .adv-row{ flex:0 0 auto; }
+  .checkbox-row{
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    font-size:0.9rem; color:var(--muted);
+  }
+  .checkbox-row input{ width:16px; height:16px; accent-color: var(--gold); cursor:pointer; }
+  .winner-reveal{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center;
+    min-height:70px; padding:16px 14px; border:1px solid var(--edge); border-radius:14px;
+    background: rgba(255,255,255,0.02); margin-bottom:16px;
+  }
+  .winner-reveal:empty::before{
+    content:'\2014'; color:var(--muted); font-family:var(--font-display); font-size:1.3rem;
+  }
+  .winner-card{
+    font-family:var(--font-display); font-weight:600; font-size:1.25rem;
+    padding:10px 18px; border-radius:10px; color:var(--muted);
+    background: rgba(255,255,255,0.03); border:1px solid var(--edge);
+    opacity:0; transform: scale(0.6) rotate(-4deg);
+  }
+  .winner-card.revealed{
+    color:#241a0b; border-color:transparent;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    box-shadow: 0 0 28px color-mix(in srgb, var(--gold-bright) 55%, transparent);
+    animation: winner-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation-delay: var(--stagger, 0s);
+  }
+  @keyframes winner-pop{
+    0%{ transform: scale(0.55) rotate(-4deg); opacity:0; }
+    60%{ transform: scale(1.1) rotate(3deg); opacity:1; }
+    100%{ transform: scale(1) rotate(0deg); opacity:1; }
+  }
+
   footer.note{
     text-align:center;
     color:var(--muted);
@@ -388,8 +427,9 @@
 
   .theme-bar{
     display:flex; align-items:center; justify-content:flex-end;
-    gap:10px; margin-bottom:10px;
+    gap:18px; flex-wrap:wrap; margin-bottom:10px;
   }
+  .control-group{ display:flex; align-items:center; gap:8px; }
   .theme-label{
     font-family:var(--font-display); font-size:0.68rem; letter-spacing:0.16em;
     text-transform:uppercase; color:var(--muted);
@@ -399,6 +439,18 @@
     font-family:var(--font-body); font-size:0.95rem; border-radius:9px; padding:6px 10px;
     cursor:pointer;
   }
+
+  .names-panel{
+    background: var(--panel-2); border:1px solid var(--edge); border-radius:14px;
+    padding:12px 16px; margin-bottom:16px; display:flex; flex-direction:column; gap:6px;
+  }
+  .names-panel[hidden]{ display:none; }
+  .names-panel textarea{
+    width:100%; resize:vertical; min-height:44px;
+    background: rgba(255,255,255,0.03); border:1px solid var(--edge); border-radius:9px;
+    color:var(--parchment); font-family:var(--font-body); font-size:1rem; padding:8px 10px;
+  }
+  .names-hint{ font-size:0.82rem; color:var(--muted); font-style:italic; }
 
   .advanced-panel{ }
   .advanced-panel summary{
@@ -448,13 +500,28 @@
 <body>
 <div class="wrap">
   <div class="theme-bar">
-    <label for="themeSelect" class="theme-label">Style</label>
-    <select id="themeSelect">
-      <option value="arcane">Arcane Circle</option>
-      <option value="steampunk">Steampunk Contraption</option>
-      <option value="scifi">Sci-Fi Bay</option>
-      <option value="nature">Wild Grove</option>
-    </select>
+    <div class="control-group">
+      <label for="modeSelect" class="theme-label">Mode</label>
+      <select id="modeSelect">
+        <option value="numbered">Numbered</option>
+        <option value="named">Named</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="themeSelect" class="theme-label">Style</label>
+      <select id="themeSelect">
+        <option value="arcane">Arcane Circle</option>
+        <option value="steampunk">Steampunk Contraption</option>
+        <option value="scifi">Sci-Fi Bay</option>
+        <option value="nature">Wild Grove</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="names-panel" id="namesPanel" hidden>
+    <label for="namesInput" class="theme-label">Name the Faces</label>
+    <textarea id="namesInput" rows="2" placeholder="Alice, Bob, Charlie, Dana…"></textarea>
+    <div class="names-hint" id="namesHint">Add names to replace numbers in the reading.</div>
   </div>
 
   <div class="masthead">
@@ -474,7 +541,7 @@
     </div>
 
     <div class="grimoire">
-      <div class="panel">
+      <div class="panel" id="conjurePanel">
         <h2 id="conjureHeading">Conjure a Die</h2>
         <div class="die-grid" id="dieGrid"></div>
         <div class="qty-row">
@@ -488,13 +555,30 @@
         <button class="btn" id="addBtn">+ Add to Pot</button>
       </div>
 
-      <div class="panel">
+      <div class="panel" id="potPanel">
         <h2 id="potHeading">The Pot</h2>
         <ul class="pot-list" id="potList"></ul>
         <div class="pot-actions">
           <button class="btn ghost" id="clearBtn">Empty Pot</button>
           <button class="btn primary" id="castBtn" disabled>Cast the Pot</button>
         </div>
+      </div>
+
+      <div class="panel winner-panel" id="winnerPanel" hidden>
+        <h2 id="winnerHeading">The Winner</h2>
+        <p class="winner-hint" id="winnerHint">One die, one face per name — cast it to choose.</p>
+        <div class="draw-controls">
+          <div class="adv-row">
+            <label for="drawCountInput">Names to draw</label>
+            <input type="number" id="drawCountInput" value="1" min="1" max="50" step="1" />
+          </div>
+          <label class="checkbox-row" for="rerollDuplicatesInput">
+            <input type="checkbox" id="rerollDuplicatesInput" checked />
+            <span>Reroll duplicates</span>
+          </label>
+        </div>
+        <div class="winner-reveal" id="winnerReveal"></div>
+        <button class="btn primary" id="drawBtn" disabled>Draw the Winner</button>
       </div>
 
       <div class="panel ledger" id="ledger" hidden>
@@ -1074,16 +1158,27 @@
   }
 
   var lastRawSum = null;
+  var lastResults = null; // [{typeKey, value}]
 
   function showResults(){
-    var groups = {};
     var total = 0;
-    activeDice.forEach(function(d){
-      if (!groups[d.typeKey]) groups[d.typeKey] = [];
-      groups[d.typeKey].push(d.displayValue);
+    lastResults = activeDice.map(function(d){
       total += d.value;
+      return { typeKey: d.typeKey, value: d.value };
     });
     lastRawSum = total;
+    renderLedgerGroups();
+    document.getElementById('ledger').removeAttribute('hidden');
+    updateTotalDisplay();
+  }
+
+  function renderLedgerGroups(){
+    if (!lastResults) return;
+    var groups = {};
+    lastResults.forEach(function(r){
+      if (!groups[r.typeKey]) groups[r.typeKey] = [];
+      groups[r.typeKey].push(r.value);
+    });
     var groupsEl = document.getElementById('ledgerGroups');
     groupsEl.innerHTML = '';
     orderedTypeKeys(groups).forEach(function(typeKey){
@@ -1099,14 +1194,12 @@
       groups[typeKey].forEach(function(v){
         var pill = document.createElement('span');
         pill.className = 'val-pill';
-        pill.textContent = v;
+        pill.textContent = String(v);
         vals.appendChild(pill);
       });
       wrap.appendChild(vals);
       groupsEl.appendChild(wrap);
     });
-    document.getElementById('ledger').removeAttribute('hidden');
-    updateTotalDisplay();
   }
 
   function updateTotalDisplay(){
@@ -1460,6 +1553,154 @@
   document.getElementById('themeSelect').addEventListener('change', function(e){
     applyTheme(e.target.value);
   });
+
+  /* ============ Numbered / Named mode ============ */
+  var currentMode = 'numbered';
+  var nameList = [];
+
+  function updateNamesHint(){
+    var hint = document.getElementById('namesHint');
+    hint.textContent = nameList.length
+      ? (nameList.length + ' name' + (nameList.length === 1 ? '' : 's') + ' ready.')
+      : 'Add at least two names, then draw.';
+    document.getElementById('drawBtn').disabled = nameList.length < 2;
+    syncDrawCountLimit();
+  }
+
+  function syncDrawCountLimit(){
+    var reroll = document.getElementById('rerollDuplicatesInput').checked;
+    var countInput = document.getElementById('drawCountInput');
+    if (reroll && nameList.length){
+      countInput.max = nameList.length;
+      if (parseInt(countInput.value, 10) > nameList.length) countInput.value = nameList.length;
+    } else {
+      countInput.max = 50;
+    }
+  }
+  document.getElementById('rerollDuplicatesInput').addEventListener('change', syncDrawCountLimit);
+
+  function applyModeVisibility(){
+    var isNamed = (currentMode === 'named');
+    document.getElementById('namesPanel').hidden = !isNamed;
+    document.getElementById('conjurePanel').hidden = isNamed;
+    document.getElementById('potPanel').hidden = isNamed;
+    document.getElementById('winnerPanel').hidden = !isNamed;
+    document.getElementById('advancedPanel').hidden = isNamed;
+    if (isNamed) document.getElementById('ledger').setAttribute('hidden', '');
+  }
+
+  document.getElementById('modeSelect').addEventListener('change', function(e){
+    currentMode = e.target.value;
+    applyModeVisibility();
+    updateNamesHint();
+  });
+
+  // sync with the select's actual value on load, in case the browser restored a
+  // previous selection (autofill/back-forward cache) independently of our default
+  currentMode = document.getElementById('modeSelect').value || 'numbered';
+  applyModeVisibility();
+
+  document.getElementById('namesInput').addEventListener('input', function(e){
+    nameList = e.target.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
+    updateNamesHint();
+  });
+  updateNamesHint();
+
+  /* ============ Draw the Winner (Named mode) ============ */
+  function drawWinner(){
+    if (nameList.length < 2) return;
+    var n = nameList.length;
+    var reroll = document.getElementById('rerollDuplicatesInput').checked;
+    var drawCount = Math.max(1, Math.min(50, parseInt(document.getElementById('drawCountInput').value, 10) || 1));
+    if (reroll) drawCount = Math.min(drawCount, n);
+    document.getElementById('drawCountInput').value = drawCount;
+    document.getElementById('drawBtn').disabled = true;
+
+    var winnerEl = document.getElementById('winnerReveal');
+    winnerEl.innerHTML = '';
+
+    clearActiveDice();
+    var typeKey = ensureCustomDieType(n);
+    var faces = getFaces(typeKey);
+
+    var faceIndices = [];
+    if (reroll){
+      var pool = faces.map(function(f, i){ return i; });
+      for (var i = pool.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+      }
+      faceIndices = pool.slice(0, drawCount);
+    } else {
+      for (var k = 0; k < drawCount; k++) faceIndices.push(Math.floor(Math.random() * faces.length));
+    }
+
+    var positions = packPositions(drawCount);
+    var maxDuration = 0;
+    var results = [];
+    var restY = 0.36;
+
+    faceIndices.forEach(function(faceIdx, idx){
+      var face = faces[faceIdx];
+      results.push(nameList[(face.value - 1 + n) % n]);
+
+      var tmpl = getTemplate(typeKey);
+      var group = tmpl.clone(true);
+      var pos = positions[idx];
+      var baseQuat = new THREE.Quaternion().setFromUnitVectors(face.normal.clone().normalize(), UP);
+      var yaw = new THREE.Quaternion().setFromAxisAngle(UP, Math.random()*Math.PI*2);
+      var finalQuat = yaw.multiply(baseQuat);
+
+      var rollAngle = Math.random()*Math.PI*2;
+      var rollDir = new THREE.Vector3(Math.cos(rollAngle), 0, Math.sin(rollAngle));
+      var rollAxis = new THREE.Vector3(-rollDir.z, 0, rollDir.x).normalize();
+      var rollDistance = 2.6 + Math.random()*0.6;
+      var startPos = new THREE.Vector3(pos.x - rollDir.x*rollDistance, restY, pos.z - rollDir.z*rollDistance);
+      var restPos = new THREE.Vector3(pos.x, restY, pos.z);
+      var rollFrac = REDUCED_MOTION ? 0.5 : 0.7;
+      var totalSpinAngle = (REDUCED_MOTION ? 1.5 : 3.5 + Math.random()) * Math.PI * 2;
+      var rollEndQuat = new THREE.Quaternion().setFromAxisAngle(rollAxis, totalSpinAngle);
+      var stagger = idx * (REDUCED_MOTION ? 30 : 75);
+      var duration = REDUCED_MOTION ? 320 : 1150;
+
+      group.position.copy(startPos);
+      group.quaternion.identity();
+      scene.add(group);
+      var shadow = makeShadowMesh();
+      shadow.position.set(startPos.x, 0.02, startPos.z);
+      scene.add(shadow);
+
+      activeDice.push({
+        id: uid(), typeKey: typeKey, group: group, shadow: shadow,
+        value: face.value, displayValue: String(face.value),
+        anim: {
+          style: 'roll', startPos: startPos, restPos: restPos,
+          rollAxis: rollAxis, totalSpinAngle: totalSpinAngle, rollEndQuat: rollEndQuat,
+          finalQuat: finalQuat, rollFrac: rollFrac,
+          startTime: performance.now() + stagger, duration: duration, done: false
+        }
+      });
+      maxDuration = Math.max(maxDuration, stagger + duration);
+    });
+
+    var circleField = document.getElementById('circleField');
+    circleField.classList.add('casting');
+
+    setTimeout(function(){
+      circleField.classList.remove('casting');
+      results.forEach(function(name, i){
+        var card = document.createElement('span');
+        card.className = 'winner-card';
+        card.style.setProperty('--stagger', (i * 110) + 'ms');
+        card.textContent = name;
+        winnerEl.appendChild(card);
+        void card.offsetWidth; // restart animation cleanly even on repeated draws
+        card.classList.add('revealed');
+      });
+      document.getElementById('drawBtn').disabled = (nameList.length < 2);
+    }, maxDuration + 150);
+  }
+  document.getElementById('drawBtn').addEventListener('click', drawWinner);
 
   /* ============ Calculator ============ */
   var calcDisplayEl = document.getElementById('calcDisplay');
