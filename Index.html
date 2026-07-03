@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>The Casting Circle · Dice Pot</title>
+<title>Dicey · The Casting Circle</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Rye&family=Special+Elite&family=Orbitron:wght@500;600;700&family=Rajdhani:wght@500;600;700&family=Almendra:wght@400;700&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --void:#0a0812;
@@ -24,6 +24,40 @@
     --sapphire:#4f7fd6;
     --rose:#c15f95;
     --shadow-glow: 0 0 40px rgba(139,107,255,0.18);
+    --font-display: 'Cinzel', serif;
+    --font-body: 'Cormorant Garamond', serif;
+    --bg-glow-1: rgba(75,46,131,0.35);
+    --bg-glow-2: rgba(193,95,149,0.10);
+  }
+  [data-theme="steampunk"]{
+    --void:#160f09; --panel:#251a10; --panel-2:#2c2013;
+    --edge: rgba(200,150,85,0.28); --parchment:#f0e0c2; --muted:#b89a72;
+    --gold:#c98a3a; --gold-bright:#e8b869; --violet:#8a6538; --violet-deep:#4a3218;
+    --ember:#a8532a; --emerald:#6a7a42; --sapphire:#4a6a78; --rose:#a8623a;
+    --shadow-glow: 0 0 40px rgba(200,150,85,0.18);
+    --font-display: 'Rye', serif;
+    --font-body: 'Special Elite', monospace;
+    --bg-glow-1: rgba(168,83,42,0.28); --bg-glow-2: rgba(106,122,66,0.12);
+  }
+  [data-theme="scifi"]{
+    --void:#050a12; --panel:#0a1826; --panel-2:#0e2030;
+    --edge: rgba(56,214,255,0.3); --parchment:#dff6ff; --muted:#6fa8c2;
+    --gold:#38d6ff; --gold-bright:#8ff0ff; --violet:#7b5cff; --violet-deep:#2a2270;
+    --ember:#ff5c5c; --emerald:#3ff2a0; --sapphire:#4fa8ff; --rose:#ff5ca8;
+    --shadow-glow: 0 0 40px rgba(56,214,255,0.22);
+    --font-display: 'Orbitron', sans-serif;
+    --font-body: 'Rajdhani', sans-serif;
+    --bg-glow-1: rgba(56,214,255,0.22); --bg-glow-2: rgba(123,92,255,0.14);
+  }
+  [data-theme="nature"]{
+    --void:#0e1a10; --panel:#16261a; --panel-2:#1c3222;
+    --edge: rgba(154,196,110,0.3); --parchment:#eef3e0; --muted:#9db38a;
+    --gold:#a3c15a; --gold-bright:#c8e070; --violet:#7a9a5a; --violet-deep:#3a4a2a;
+    --ember:#c17a3a; --emerald:#4a9a5c; --sapphire:#4a8a7a; --rose:#c1855a;
+    --shadow-glow: 0 0 40px rgba(163,193,90,0.2);
+    --font-display: 'Almendra', serif;
+    --font-body: 'Cormorant Garamond', serif;
+    --bg-glow-1: rgba(74,154,92,0.28); --bg-glow-2: rgba(163,193,90,0.12);
   }
   *{ box-sizing:border-box; }
   html,body{ height:100%; }
@@ -31,18 +65,19 @@
     margin:0;
     min-height:100%;
     background:
-      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(75,46,131,0.35), transparent 60%),
-      radial-gradient(ellipse 60% 50% at 85% 100%, rgba(193,95,149,0.10), transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% -10%, var(--bg-glow-1), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 100%, var(--bg-glow-2), transparent 60%),
       var(--void);
     color:var(--parchment);
-    font-family:'Cormorant Garamond', serif;
+    font-family:var(--font-body);
     -webkit-font-smoothing:antialiased;
+    transition: background 0.4s ease, color 0.4s ease;
   }
   ::selection{ background:var(--violet-deep); color:var(--gold-bright); }
   :focus-visible{ outline:2px solid var(--gold-bright); outline-offset:3px; border-radius:4px; }
 
   .eyebrow{
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:0.68rem;
     letter-spacing:0.32em;
     text-transform:uppercase;
@@ -61,7 +96,7 @@
     margin-bottom: clamp(20px, 4vw, 36px);
   }
   .masthead h1{
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-weight:700;
     font-size: clamp(1.8rem, 4vw, 2.7rem);
     margin: 8px 0 6px;
@@ -146,7 +181,7 @@
     position:absolute;
     bottom:14px; left:0; right:0;
     text-align:center;
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:0.62rem;
     letter-spacing:0.22em;
     text-transform:uppercase;
@@ -169,7 +204,7 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.35);
   }
   .panel h2{
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:0.78rem;
     letter-spacing:0.18em;
     text-transform:uppercase;
@@ -199,7 +234,7 @@
     cursor:pointer;
     display:flex; flex-direction:column; align-items:center; gap:5px;
     transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:0.7rem;
     letter-spacing:0.05em;
   }
@@ -211,6 +246,21 @@
     box-shadow: 0 0 18px color-mix(in srgb, var(--accent, var(--violet)) 40%, transparent);
   }
   .die-btn.selected .die-icon-stroke{ stroke: var(--accent, var(--gold-bright)); }
+  .custom-die-btn{ cursor:pointer; }
+  .custom-die-btn input[type="number"]{
+    width:44px;
+    background: rgba(255,255,255,0.04);
+    border:1px solid var(--edge);
+    border-radius:6px;
+    color:var(--parchment);
+    font-family:var(--font-body);
+    font-size:0.85rem;
+    text-align:center;
+    padding:2px 0;
+    -moz-appearance:textfield;
+  }
+  .custom-die-btn input[type="number"]::-webkit-outer-spin-button,
+  .custom-die-btn input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
 
   .qty-row{
     display:flex; align-items:center; gap:10px;
@@ -228,18 +278,18 @@
   .stepper button{
     background:transparent; border:none; color:var(--gold-bright);
     width:30px; height:32px; font-size:1.1rem; cursor:pointer;
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
   }
   .stepper button:hover{ background:rgba(139,107,255,0.14); }
   .stepper input{
     width:38px; text-align:center; background:transparent; border:none;
-    color:var(--parchment); font-family:'Cormorant Garamond', serif; font-size:1.05rem;
+    color:var(--parchment); font-family:var(--font-body); font-size:1.05rem;
     -moz-appearance:textfield;
   }
   .stepper input::-webkit-outer-spin-button, .stepper input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
 
   .btn{
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     letter-spacing:0.1em;
     font-size:0.75rem;
     text-transform:uppercase;
@@ -279,7 +329,7 @@
     color:var(--parchment);
     border-radius:999px;
     padding:5px 6px 5px 12px;
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:0.72rem;
     letter-spacing:0.04em;
   }
@@ -299,7 +349,7 @@
   }
   .ledger[hidden]{ display:none; }
   .ledger-total{
-    font-family:'Cinzel', serif;
+    font-family:var(--font-display);
     font-size:1.6rem;
     color:var(--gold-bright);
     text-align:center;
@@ -307,9 +357,10 @@
     text-shadow: 0 0 20px rgba(216,178,92,0.35);
   }
   .ledger-total span{ font-size:0.9rem; color:var(--muted); display:block; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:4px; }
+  .ledger-breakdown{ font-size:0.85rem; color:var(--muted); font-style:italic; margin-top:2px; }
   .ledger-groups{ display:flex; flex-direction:column; gap:10px; }
   .ledger-group h3{
-    margin:0 0 6px; font-family:'Cinzel', serif; font-size:0.68rem;
+    margin:0 0 6px; font-family:var(--font-display); font-size:0.68rem;
     letter-spacing:0.14em; text-transform:uppercase; color:var(--group-color, var(--gold));
   }
   .ledger-values{ display:flex; flex-wrap:wrap; gap:6px; }
@@ -319,6 +370,45 @@
     border-radius:8px;
     padding:3px 9px;
     font-size:1.02rem;
+  }
+
+  .winner-panel{ text-align:center; }
+  .winner-hint{ color:var(--muted); font-size:0.9rem; margin:-4px 0 14px; }
+  .draw-controls{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    flex-wrap:wrap; margin-bottom:14px; text-align:left;
+  }
+  .draw-controls .adv-row{ flex:0 0 auto; }
+  .checkbox-row{
+    display:flex; align-items:center; gap:8px; cursor:pointer;
+    font-size:0.9rem; color:var(--muted);
+  }
+  .checkbox-row input{ width:16px; height:16px; accent-color: var(--gold); cursor:pointer; }
+  .winner-reveal{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; align-items:center;
+    min-height:70px; padding:16px 14px; border:1px solid var(--edge); border-radius:14px;
+    background: rgba(255,255,255,0.02); margin-bottom:16px;
+  }
+  .winner-reveal:empty::before{
+    content:'\2014'; color:var(--muted); font-family:var(--font-display); font-size:1.3rem;
+  }
+  .winner-card{
+    font-family:var(--font-display); font-weight:600; font-size:1.25rem;
+    padding:10px 18px; border-radius:10px; color:var(--muted);
+    background: rgba(255,255,255,0.03); border:1px solid var(--edge);
+    opacity:0; transform: scale(0.6) rotate(-4deg);
+  }
+  .winner-card.revealed{
+    color:#241a0b; border-color:transparent;
+    background: linear-gradient(135deg, var(--gold-bright), var(--gold));
+    box-shadow: 0 0 28px color-mix(in srgb, var(--gold-bright) 55%, transparent);
+    animation: winner-pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+    animation-delay: var(--stagger, 0s);
+  }
+  @keyframes winner-pop{
+    0%{ transform: scale(0.55) rotate(-4deg); opacity:0; }
+    60%{ transform: scale(1.1) rotate(3deg); opacity:1; }
+    100%{ transform: scale(1) rotate(0deg); opacity:1; }
   }
 
   footer.note{
@@ -334,41 +424,125 @@
     .rune-ring{ animation:none; }
     .circle-field.casting::after{ animation:none; }
   }
+
+  .theme-bar{
+    display:flex; align-items:center; justify-content:flex-end;
+    gap:18px; flex-wrap:wrap; margin-bottom:10px;
+  }
+  .control-group{ display:flex; align-items:center; gap:8px; }
+  .theme-label{
+    font-family:var(--font-display); font-size:0.68rem; letter-spacing:0.16em;
+    text-transform:uppercase; color:var(--muted);
+  }
+  .theme-bar select{
+    background: var(--panel-2); border:1px solid var(--edge); color:var(--parchment);
+    font-family:var(--font-body); font-size:0.95rem; border-radius:9px; padding:6px 10px;
+    cursor:pointer;
+  }
+
+  .names-panel{
+    background: var(--panel-2); border:1px solid var(--edge); border-radius:14px;
+    padding:12px 16px; margin-bottom:16px; display:flex; flex-direction:column; gap:6px;
+  }
+  .names-panel[hidden]{ display:none; }
+  .names-panel textarea{
+    width:100%; resize:vertical; min-height:44px;
+    background: rgba(255,255,255,0.03); border:1px solid var(--edge); border-radius:9px;
+    color:var(--parchment); font-family:var(--font-body); font-size:1rem; padding:8px 10px;
+  }
+  .names-hint{ font-size:0.82rem; color:var(--muted); font-style:italic; }
+
+  .advanced-panel{ }
+  .advanced-panel summary{
+    font-family:var(--font-display); font-size:0.78rem; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--gold-bright);
+    cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px;
+  }
+  .advanced-panel summary::-webkit-details-marker{ display:none; }
+  .advanced-panel summary::after{
+    content:'▾'; margin-left:auto; color:var(--muted);
+    transition: transform 0.2s ease;
+  }
+  .advanced-panel[open] summary::after{ transform: rotate(180deg); }
+  .advanced-body{ margin-top:14px; display:flex; flex-direction:column; gap:12px; }
+  .adv-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .adv-row label{ font-size:0.9rem; color:var(--muted); }
+  .adv-row input[type="number"]{
+    width:76px; background: rgba(255,255,255,0.03); border:1px solid var(--edge);
+    border-radius:9px; color:var(--parchment); font-family:var(--font-body);
+    font-size:1rem; text-align:center; padding:6px 4px;
+  }
+
+  .calculator{
+    border-top:1px solid var(--edge); padding-top:12px; margin-top:2px;
+  }
+  .calc-display{
+    background: rgba(0,0,0,0.25); border:1px solid var(--edge); border-radius:9px;
+    padding:10px 12px; text-align:right; font-family:var(--font-body);
+    font-size:1.5rem; color:var(--gold-bright); margin-bottom:8px;
+    overflow-x:auto; white-space:nowrap;
+  }
+  .calc-grid{ display:grid; grid-template-columns: repeat(4, 1fr); gap:6px; margin-bottom:10px; }
+  .calc-grid button{
+    background: rgba(255,255,255,0.03); border:1px solid var(--edge); border-radius:8px;
+    color:var(--parchment); font-family:var(--font-body); font-size:1.05rem;
+    padding:9px 0; cursor:pointer; transition: background 0.12s ease, transform 0.1s ease;
+  }
+  .calc-grid button:hover{ background: rgba(255,255,255,0.08); transform: translateY(-1px); }
+  .calc-grid button.calc-op{ color:var(--gold-bright); }
+  .calc-grid button.calc-eq{
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color:#241a0b; border-color:transparent;
+  }
+  .calc-grid button.calc-zero{ grid-column: span 2; }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="theme-bar">
+    <div class="control-group">
+      <label for="modeSelect" class="theme-label">Mode</label>
+      <select id="modeSelect">
+        <option value="numbered">Numbered</option>
+        <option value="named">Named</option>
+      </select>
+    </div>
+    <div class="control-group">
+      <label for="themeSelect" class="theme-label">Style</label>
+      <select id="themeSelect">
+        <option value="arcane">Arcane Circle</option>
+        <option value="steampunk">Steampunk Contraption</option>
+        <option value="scifi">Sci-Fi Bay</option>
+        <option value="nature">Wild Grove</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="names-panel" id="namesPanel" hidden>
+    <label for="namesInput" class="theme-label">Name the Faces</label>
+    <textarea id="namesInput" rows="2" placeholder="Alice, Bob, Charlie, Dana…"></textarea>
+    <div class="names-hint" id="namesHint">Add names to replace numbers in the reading.</div>
+  </div>
+
   <div class="masthead">
-    <div class="eyebrow">A Ritual Implement</div>
-    <h1>The Casting Circle</h1>
-    <p>Conjure dice into the pot, then cast them upon the circle and let fate settle.</p>
+    <div class="eyebrow" id="eyebrowText">A Ritual Implement</div>
+    <h1 id="pageTitle">Dicey</h1>
+    <p id="tagline">Conjure dice into the pot, then cast them upon the circle and let fate settle.</p>
   </div>
 
   <div class="stage">
     <div class="circle-frame">
       <div class="circle-field" id="circleField">
-        <svg class="rune-ring outer" viewBox="0 0 200 200" aria-hidden="true">
-          <circle cx="100" cy="100" r="92" fill="none" stroke="#8b6bff" stroke-width="0.6" opacity="0.5"/>
-          <circle cx="100" cy="100" r="84" fill="none" stroke="#d8b25c" stroke-width="0.4" opacity="0.4"/>
-          <g stroke="#8b6bff" stroke-width="1" opacity="0.6">
-            <!-- 16 rune ticks -->
-            <g id="tickGroup"></g>
-          </g>
-          <polygon points="100,20 174,145 26,145" fill="none" stroke="#d8b25c" stroke-width="0.5" opacity="0.35" />
-          <polygon points="100,180 26,55 174,55" fill="none" stroke="#8b6bff" stroke-width="0.5" opacity="0.35" />
-        </svg>
-        <svg class="rune-ring inner" viewBox="0 0 200 200" aria-hidden="true">
-          <circle cx="100" cy="100" r="90" fill="none" stroke="#f3d488" stroke-width="0.7" opacity="0.5"/>
-          <circle cx="100" cy="100" r="60" fill="none" stroke="#f3d488" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 4"/>
-        </svg>
+        <svg class="rune-ring outer" id="ringOuter" viewBox="0 0 200 200" aria-hidden="true"></svg>
+        <svg class="rune-ring inner" id="ringInner" viewBox="0 0 200 200" aria-hidden="true"></svg>
         <canvas id="scene"></canvas>
-        <div class="scene-hint">The Pot Awaits</div>
+        <div class="scene-hint" id="sceneHint">The Pot Awaits</div>
       </div>
     </div>
 
     <div class="grimoire">
-      <div class="panel">
-        <h2>Conjure a Die</h2>
+      <div class="panel" id="conjurePanel">
+        <h2 id="conjureHeading">Conjure a Die</h2>
         <div class="die-grid" id="dieGrid"></div>
         <div class="qty-row">
           <label for="qtyInput">Quantity to add</label>
@@ -381,24 +555,80 @@
         <button class="btn" id="addBtn">+ Add to Pot</button>
       </div>
 
-      <div class="panel">
-        <h2>The Pot</h2>
-        <ul class="pot-list" id="potList"><li class="pot-empty">The pot is empty. Conjure a die above.</li></ul>
+      <div class="panel" id="potPanel">
+        <h2 id="potHeading">The Pot</h2>
+        <ul class="pot-list" id="potList"></ul>
         <div class="pot-actions">
           <button class="btn ghost" id="clearBtn">Empty Pot</button>
           <button class="btn primary" id="castBtn" disabled>Cast the Pot</button>
         </div>
       </div>
 
+      <div class="panel winner-panel" id="winnerPanel" hidden>
+        <h2 id="winnerHeading">The Winner</h2>
+        <p class="winner-hint" id="winnerHint">One die, one face per name — cast it to choose.</p>
+        <div class="draw-controls">
+          <div class="adv-row">
+            <label for="drawCountInput">Names to draw</label>
+            <input type="number" id="drawCountInput" value="1" min="1" max="50" step="1" />
+          </div>
+          <label class="checkbox-row" for="rerollDuplicatesInput">
+            <input type="checkbox" id="rerollDuplicatesInput" checked />
+            <span>Reroll duplicates</span>
+          </label>
+        </div>
+        <div class="winner-reveal" id="winnerReveal"></div>
+        <button class="btn primary" id="drawBtn" disabled>Draw the Winner</button>
+      </div>
+
       <div class="panel ledger" id="ledger" hidden>
-        <h2>The Reading</h2>
+        <h2 id="ledgerHeading">The Reading</h2>
         <div class="ledger-total" id="ledgerTotal"></div>
         <div class="ledger-groups" id="ledgerGroups"></div>
       </div>
+
+      <details class="panel advanced-panel" id="advancedPanel">
+        <summary id="advancedHeading">Advanced</summary>
+        <div class="advanced-body">
+          <div class="adv-row">
+            <label for="multiplierInput">Score multiplier (×)</label>
+            <input type="number" id="multiplierInput" value="1" min="0.1" max="20" step="0.5" />
+          </div>
+          <div class="adv-row">
+            <label for="modifierInput">Flat modifier (+/−)</label>
+            <input type="number" id="modifierInput" value="0" step="1" />
+          </div>
+          <div class="calculator">
+            <div class="calc-display" id="calcDisplay">0</div>
+            <div class="calc-grid" id="calcGrid">
+              <button type="button" data-calc="C">C</button>
+              <button type="button" data-calc="±">±</button>
+              <button type="button" data-calc="%">%</button>
+              <button type="button" data-calc="/" class="calc-op">÷</button>
+              <button type="button" data-calc="7">7</button>
+              <button type="button" data-calc="8">8</button>
+              <button type="button" data-calc="9">9</button>
+              <button type="button" data-calc="*" class="calc-op">×</button>
+              <button type="button" data-calc="4">4</button>
+              <button type="button" data-calc="5">5</button>
+              <button type="button" data-calc="6">6</button>
+              <button type="button" data-calc="-" class="calc-op">−</button>
+              <button type="button" data-calc="1">1</button>
+              <button type="button" data-calc="2">2</button>
+              <button type="button" data-calc="3">3</button>
+              <button type="button" data-calc="+" class="calc-op">+</button>
+              <button type="button" data-calc="0" class="calc-zero">0</button>
+              <button type="button" data-calc=".">.</button>
+              <button type="button" data-calc="=" class="calc-eq">=</button>
+            </div>
+            <button class="btn ghost" id="calcToModifier" type="button">Send result → Modifier</button>
+          </div>
+        </div>
+      </details>
     </div>
   </div>
 
-  <footer class="note">Standard dice for now — specialized and custom dice will join the pot in a future working.</footer>
+  <footer class="note" id="footerNote">Choose a standard die, or set any number of sides (4–100) with the custom die tile.</footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -414,10 +644,30 @@
     d10:  { sides:10, label:'D10', color:0x3f9d72, hex:'#3f9d72' },
     d12:  { sides:12, label:'D12', color:0xd8b25c, hex:'#d8b25c' },
     d20:  { sides:20, label:'D20', color:0x9457e0, hex:'#9457e0' },
-    d100: { sides:10, label:'D100', color:0xc15f95, hex:'#c15f95', percentile:true }
+    d24:  { sides:24, label:'D24', color:0xc15f95, hex:'#c15f95' }
   };
-  var DIE_ORDER = ['d4','d6','d8','d10','d12','d20','d100'];
-  var LABEL_SIZE = { d4:0.5, d6:0.5, d8:0.4, d10:0.4, d12:0.32, d20:0.24, d100:0.4 };
+  var DIE_ORDER = ['d4','d6','d8','d10','d12','d20','d24'];
+  var CUSTOM_COLOR = 0x4fd6c0, CUSTOM_HEX = '#4fd6c0';
+  function ensureCustomDieType(n){
+    n = Math.max(4, Math.min(100, Math.round(n) || 4));
+    var key = 'dc' + n;
+    if (!DIE_TYPES[key]){
+      DIE_TYPES[key] = { sides:n, label:'D'+n, color:CUSTOM_COLOR, hex:CUSTOM_HEX, custom:true };
+    }
+    return key;
+  }
+  function orderedTypeKeys(counts){
+    var known = DIE_ORDER.filter(function(k){ return counts[k]; });
+    var extra = Object.keys(counts).filter(function(k){ return DIE_ORDER.indexOf(k) === -1; });
+    extra.sort(function(a,b){ return DIE_TYPES[a].sides - DIE_TYPES[b].sides; });
+    return known.concat(extra);
+  }
+  var LABEL_SIZE = { d4:0.74, d6:0.76, d8:0.62, d10:0.58, d12:0.48, d20:0.38, d24:0.34 };
+  function getLabelSize(typeKey, sides){
+    if (LABEL_SIZE[typeKey]) return LABEL_SIZE[typeKey];
+    var t = THREE.MathUtils.clamp((sides - 4) / (60 - 4), 0, 1);
+    return THREE.MathUtils.lerp(0.7, 0.26, t);
+  }
 
   var REDUCED_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -429,7 +679,7 @@
     d10: '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,3 24,12 20,29 12,29 8,12" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/><line x1="16" y1="3" x2="16" y2="29" stroke="#a99fc4" stroke-width="0.7" opacity="0.4"/></svg>',
     d12: '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,2 24,7 27,17 21,26 11,26 5,17 8,7" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/></svg>',
     d20: '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,2 27,10 23,25 9,25 5,10" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/><line x1="16" y1="2" x2="16" y2="25" stroke="#a99fc4" stroke-width="0.6" opacity="0.4"/><line x1="5" y1="10" x2="27" y2="10" stroke="#a99fc4" stroke-width="0.6" opacity="0.4"/></svg>',
-    d100: '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,3 24,12 20,29 12,29 8,12" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/><text x="16" y="20" font-size="9" text-anchor="middle" fill="#a99fc4" font-family="Cinzel, serif">%</text></svg>'
+    d24: '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,2 22,5 27,10 29,16 27,22 22,27 16,29 10,27 5,22 3,16 5,10 10,5" fill="none" stroke="#a99fc4" stroke-width="1.4" stroke-linejoin="round"/></svg>'
   };
 
   /* ============ THREE setup ============ */
@@ -464,29 +714,106 @@
 
   /* ============ Geometry / face math ============ */
 
-  function buildD10Positions(){
+  function buildTrapezohedronPositions(n){
+    var H = 1.15;
+    var alpha = Math.PI/n;
+    var zEq = H * Math.pow(Math.tan(alpha/2), 2); // exact condition for planar kite faces
     var equator = [];
-    for (var k=0;k<10;k++){
-      var angle = k * (Math.PI/5);
-      var z = (k % 2 === 0) ? 0.32 : -0.32;
+    for (var k=0;k<2*n;k++){
+      var angle = k * alpha;
+      var z = (k % 2 === 0) ? zEq : -zEq;
       equator.push(new THREE.Vector3(Math.cos(angle), Math.sin(angle), z));
     }
-    var top = new THREE.Vector3(0,0,1.05);
-    var bottom = new THREE.Vector3(0,0,-1.05);
-    var quads = [];
+    var top = new THREE.Vector3(0,0,H);
+    var bottom = new THREE.Vector3(0,0,-H);
+    var positions = [], faceId = [];
     var i;
-    for (i=0;i<5;i++){
-      quads.push([top, equator[2*i], equator[(2*i+1)%10], equator[(2*i+2)%10]]);
+    for (i=0;i<n;i++){
+      var t0 = equator[2*i], t1 = equator[(2*i+1)%(2*n)], t2 = equator[(2*i+2)%(2*n)];
+      positions.push(top, t0, t1); faceId.push(i);
+      positions.push(top, t1, t2); faceId.push(i);
     }
-    for (i=0;i<5;i++){
-      quads.push([bottom, equator[(2*i+1)%10], equator[(2*i+2)%10], equator[(2*i+3)%10]]);
+    for (i=0;i<n;i++){
+      var b0 = equator[(2*i+1)%(2*n)], b1 = equator[(2*i+2)%(2*n)], b2 = equator[(2*i+3)%(2*n)];
+      positions.push(bottom, b1, b0); faceId.push(n+i);
+      positions.push(bottom, b2, b1); faceId.push(n+i);
+    }
+    return { positions: positions, faceId: faceId, faceCount: 2*n };
+  }
+
+  // Deltoidal icositetrahedron (true D24 dice shape): 24 congruent kite
+  // faces, derived as the polar dual of a rhombicuboctahedron. Each dual
+  // face corresponds to a primal vertex, and is guaranteed exactly planar
+  // because all its dual-vertices satisfy v·x = 1 for that primal vertex v.
+  function buildDeltoidalIcositetrahedronPositions(){
+    var s = 1 + Math.sqrt(2);
+    var verts = [];
+    [1,-1].forEach(function(sx){ [1,-1].forEach(function(sy){ [1,-1].forEach(function(sz){
+      verts.push(new THREE.Vector3(sx*1, sy*1, sz*s));
+      verts.push(new THREE.Vector3(sx*1, sy*s, sz*1));
+      verts.push(new THREE.Vector3(sx*s, sy*1, sz*1));
+    }); }); });
+
+    var faceDefs = [];
+    [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]].forEach(function(n){
+      faceDefs.push({ normal: new THREE.Vector3(n[0],n[1],n[2]), d: s });
+    });
+    var d2 = (2+s)/Math.sqrt(3);
+    [1,-1].forEach(function(sx){ [1,-1].forEach(function(sy){ [1,-1].forEach(function(sz){
+      faceDefs.push({ normal: new THREE.Vector3(sx,sy,sz).normalize(), d: d2 });
+    }); }); });
+    var d3 = (s+1)/Math.sqrt(2);
+    [[1,1,0],[1,-1,0],[-1,1,0],[-1,-1,0],[1,0,1],[1,0,-1],[-1,0,1],[-1,0,-1],[0,1,1],[0,1,-1],[0,-1,1],[0,-1,-1]]
+      .forEach(function(d){ faceDefs.push({ normal: new THREE.Vector3(d[0],d[1],d[2]).normalize(), d: d3 }); });
+
+    faceDefs.forEach(function(f){
+      f.verts = verts.filter(function(v){ return Math.abs(v.dot(f.normal) - f.d) < 1e-6; });
+      f.dualVertex = f.normal.clone().multiplyScalar(1/f.d);
+    });
+
+    function sameV(a,b){ return Math.abs(a.x-b.x)<1e-9 && Math.abs(a.y-b.y)<1e-9 && Math.abs(a.z-b.z)<1e-9; }
+
+    var positions = [], faceId = [];
+    verts.forEach(function(v, vi){
+      var incident = faceDefs.filter(function(f){ return f.verts.some(function(fv){ return sameV(fv,v); }); });
+      var vn = v.clone().normalize();
+      var ref = Math.abs(vn.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
+      var u = new THREE.Vector3().crossVectors(vn, ref).normalize();
+      var w = new THREE.Vector3().crossVectors(vn, u);
+      var pts = incident.map(function(f){
+        var dv = f.dualVertex;
+        var proj = dv.clone().sub(vn.clone().multiplyScalar(dv.dot(vn)));
+        return { dv: dv, ang: Math.atan2(proj.dot(w), proj.dot(u)) };
+      });
+      pts.sort(function(a,b){ return a.ang - b.ang; });
+      var q = pts.map(function(p){ return p.dv; });
+      positions.push(q[0], q[1], q[2]); faceId.push(vi);
+      positions.push(q[0], q[2], q[3]); faceId.push(vi);
+    });
+
+    return { positions: positions, faceId: faceId };
+  }
+
+  // Odd side counts have no convex equal-faced solid, so we build a prism
+  // ("long die"): n congruent rectangular sides plus two end caps that are
+  // excluded from numbering, matching how real odd-sided fair dice are made.
+  function buildPrismPositions(n){
+    var r = 0.85, c = 1.1;
+    var top = [], bot = [];
+    for (var k=0;k<n;k++){
+      var ang = k * (Math.PI*2/n);
+      top.push(new THREE.Vector3(Math.cos(ang)*r, Math.sin(ang)*r, c));
+      bot.push(new THREE.Vector3(Math.cos(ang)*r, Math.sin(ang)*r, -c));
     }
     var positions = [], faceId = [];
-    quads.forEach(function(q, fi){
-      positions.push(q[0], q[1], q[2]); faceId.push(fi);
-      positions.push(q[0], q[2], q[3]); faceId.push(fi);
-    });
-    return { positions: positions, faceId: faceId };
+    for (k=0;k<n;k++){
+      var k1 = (k+1)%n;
+      positions.push(top[k], bot[k], bot[k1]); faceId.push(k);
+      positions.push(top[k], bot[k1], top[k1]); faceId.push(k);
+    }
+    for (var j=1;j<=n-2;j++){ positions.push(top[0], top[j], top[j+1]); faceId.push(n); }
+    for (j=1;j<=n-2;j++){ positions.push(bot[0], bot[j+1], bot[j]); faceId.push(n+1); }
+    return { positions: positions, faceId: faceId, faceCount: n, capFaceCount: 2 };
   }
 
   function assignValues(faces, dieKey){
@@ -511,18 +838,23 @@
       label++;
     }
     if (dieKey === 'd10'){ faces.forEach(function(f){ f.value = f.value - 1; }); }
-    if (dieKey === 'd100'){ faces.forEach(function(f){ f.value = (f.value - 1) * 10; }); }
   }
 
   function buildGeometryData(typeKey){
-    var geo, explicitFaceId = null;
+    var geo, explicitFaceId = null, capCount = 0;
+    var cfg = DIE_TYPES[typeKey];
+    var built;
     if (typeKey === 'd4') geo = new THREE.TetrahedronGeometry(1);
     else if (typeKey === 'd6') geo = new THREE.BoxGeometry(1,1,1);
     else if (typeKey === 'd8') geo = new THREE.OctahedronGeometry(1);
     else if (typeKey === 'd12') geo = new THREE.DodecahedronGeometry(1);
     else if (typeKey === 'd20') geo = new THREE.IcosahedronGeometry(1);
-    else { // d10 / d100
-      var built = buildD10Positions();
+    else if (typeKey === 'd10') built = buildTrapezohedronPositions(5);
+    else if (typeKey === 'd24') built = buildDeltoidalIcositetrahedronPositions();
+    else if (cfg.sides % 2 === 0) built = buildTrapezohedronPositions(cfg.sides / 2);
+    else { built = buildPrismPositions(cfg.sides); capCount = built.capFaceCount; }
+
+    if (built){
       geo = new THREE.BufferGeometry();
       var arr = new Float32Array(built.positions.length * 3);
       built.positions.forEach(function(v,i){ arr[i*3]=v.x; arr[i*3+1]=v.y; arr[i*3+2]=v.z; });
@@ -569,12 +901,15 @@
       groups[gIdx].count++;
     }
 
-    var faces = groups.map(function(gr){
+    var allFaces = groups.map(function(gr){
       return {
         normal: gr.normalSum.clone().normalize(),
         centroid: gr.centroidSum.clone().multiplyScalar(1/gr.count)
       };
     });
+
+    // exclude end-cap faces (prism log-dice) from numbering/labeling
+    var faces = capCount ? allFaces.slice(0, allFaces.length - capCount) : allFaces;
 
     assignValues(faces, typeKey);
     geo.computeVertexNormals();
@@ -590,7 +925,7 @@
     var size = 256;
     var cnv = document.createElement('canvas'); cnv.width = size; cnv.height = size;
     var ctx = cnv.getContext('2d');
-    var cx = size/2, cy = size/2, r = size*0.42;
+    var cx = size/2, cy = size/2, r = size*0.47;
     var grad = ctx.createRadialGradient(cx, cy-r*0.3, r*0.1, cx, cy, r);
     grad.addColorStop(0, '#241a3d');
     grad.addColorStop(1, '#120c22');
@@ -598,7 +933,7 @@
     ctx.lineWidth = size*0.025;
     ctx.strokeStyle = accentHex;
     ctx.stroke();
-    var fontSize = displayStr.length > 1 ? size*0.32 : size*0.42;
+    var fontSize = displayStr.length > 1 ? size*0.64 : size*0.86;
     ctx.font = '600 ' + fontSize + 'px "Cormorant Garamond", serif';
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.shadowColor = accentHex; ctx.shadowBlur = size*0.05;
@@ -625,17 +960,19 @@
     var cfg = DIE_TYPES[typeKey];
     var group = new THREE.Group();
 
+    var matCfg = THEMES[currentTheme].material;
     var bodyMat = new THREE.MeshPhysicalMaterial({
-      color: cfg.color, metalness:0.22, roughness:0.32,
-      clearcoat:0.55, clearcoatRoughness:0.28,
-      emissive: cfg.color, emissiveIntensity:0.05
+      color: cfg.color, metalness:matCfg.metalness, roughness:matCfg.roughness,
+      clearcoat:matCfg.clearcoat, clearcoatRoughness:matCfg.clearcoatRoughness,
+      emissive: cfg.color, emissiveIntensity:matCfg.emissiveIntensity,
+      side: THREE.DoubleSide
     });
     var bodyMesh = new THREE.Mesh(data.geometry, bodyMat);
     group.add(bodyMesh);
 
-    var labelSize = LABEL_SIZE[typeKey] || 0.32;
+    var labelSize = getLabelSize(typeKey, cfg.sides);
     data.faces.forEach(function(f){
-      var disp = cfg.percentile ? String(f.value).padStart(2,'0') : String(f.value);
+      var disp = String(f.value);
       var tex = getNumberTexture(disp, cfg.hex);
       var mat = new THREE.MeshBasicMaterial({ map: tex, transparent:true, depthWrite:false });
       var plane = new THREE.Mesh(new THREE.PlaneGeometry(labelSize, labelSize), mat);
@@ -685,6 +1022,7 @@
 
   /* ============ Easing ============ */
   function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2; }
+  function easeOutCubic(t){ return 1 - Math.pow(1-t, 3); }
   function easeOutBack(t){ var c1=1.4, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); }
   function easeOutBounce(t){
     var n1=7.5625, d1=2.75;
@@ -734,43 +1072,75 @@
       var group = tmpl.clone(true);
       var pos = positions[i];
       var restY = 0.36;
-      var dropY = 3.2 + Math.random()*0.6;
-      group.position.set(pos.x, dropY, pos.z);
-      group.quaternion.copy(randomQuaternion());
-      scene.add(group);
-
-      var shadow = makeShadowMesh();
-      shadow.position.set(pos.x, 0.02, pos.z);
-      scene.add(shadow);
+      var cfg = DIE_TYPES[item.typeKey];
+      var isCustom = !!cfg.custom;
 
       var faces = getFaces(item.typeKey);
       var faceIdx = Math.floor(Math.random() * faces.length);
       var face = faces[faceIdx];
-      var cfg = DIE_TYPES[item.typeKey];
-      var displayValue = cfg.percentile ? String(face.value).padStart(2,'0') : String(face.value);
+      var displayValue = String(face.value);
 
       var baseQuat = new THREE.Quaternion().setFromUnitVectors(face.normal.clone().normalize(), UP);
       var yaw = new THREE.Quaternion().setFromAxisAngle(UP, Math.random()*Math.PI*2);
       var finalQuat = yaw.multiply(baseQuat);
 
-      var waypoints = [group.quaternion.clone()];
-      var hops = REDUCED_MOTION ? 1 : 3;
-      for (var h=0; h<hops; h++) waypoints.push(randomQuaternion());
-      waypoints.push(finalQuat);
-
       var stagger = i * (REDUCED_MOTION ? 30 : 75);
       var duration = REDUCED_MOTION ? 320 : 1150;
+      var shadow = makeShadowMesh();
+      var anim;
+
+      if (isCustom){
+        // rolling-in animation: translate across the table while spinning about a horizontal axis
+        var rollAngle = Math.random()*Math.PI*2;
+        var rollDir = new THREE.Vector3(Math.cos(rollAngle), 0, Math.sin(rollAngle));
+        var rollAxis = new THREE.Vector3(-rollDir.z, 0, rollDir.x).normalize();
+        var rollDistance = 2.6 + Math.random()*0.6;
+        var startPos = new THREE.Vector3(pos.x - rollDir.x*rollDistance, restY, pos.z - rollDir.z*rollDistance);
+        var restPos = new THREE.Vector3(pos.x, restY, pos.z);
+        var rollFrac = REDUCED_MOTION ? 0.5 : 0.7;
+        var totalSpinAngle = (REDUCED_MOTION ? 1.5 : 3.5 + Math.random()) * Math.PI * 2;
+        var rollEndQuat = new THREE.Quaternion().setFromAxisAngle(rollAxis, totalSpinAngle);
+
+        group.position.copy(startPos);
+        group.quaternion.identity();
+        scene.add(group);
+        shadow.position.set(startPos.x, 0.02, startPos.z);
+        scene.add(shadow);
+
+        anim = {
+          style: 'roll',
+          startPos: startPos, restPos: restPos,
+          rollAxis: rollAxis, totalSpinAngle: totalSpinAngle, rollEndQuat: rollEndQuat,
+          finalQuat: finalQuat, rollFrac: rollFrac,
+          startTime: performance.now() + stagger, duration: duration,
+          done: false
+        };
+      } else {
+        var dropY = 3.2 + Math.random()*0.6;
+        group.position.set(pos.x, dropY, pos.z);
+        group.quaternion.copy(randomQuaternion());
+        scene.add(group);
+        shadow.position.set(pos.x, 0.02, pos.z);
+        scene.add(shadow);
+
+        var waypoints = [group.quaternion.clone()];
+        var hops = REDUCED_MOTION ? 1 : 3;
+        for (var h=0; h<hops; h++) waypoints.push(randomQuaternion());
+        waypoints.push(finalQuat);
+
+        anim = {
+          style: 'bounce',
+          waypoints: waypoints,
+          startTime: performance.now() + stagger, duration: duration,
+          startY: dropY, restY: restY,
+          done: false
+        };
+      }
 
       var dieObj = {
         id: uid(), typeKey: item.typeKey, group: group, shadow: shadow,
         value: face.value, displayValue: displayValue,
-        anim: {
-          waypoints: waypoints,
-          startTime: performance.now() + stagger,
-          duration: duration,
-          startY: dropY, restY: restY,
-          done: false
-        }
+        anim: anim
       };
       activeDice.push(dieObj);
       maxDuration = Math.max(maxDuration, stagger + duration);
@@ -787,18 +1157,31 @@
     }, maxDuration + 150);
   }
 
+  var lastRawSum = null;
+  var lastResults = null; // [{typeKey, value}]
+
   function showResults(){
-    var groups = {};
     var total = 0;
-    activeDice.forEach(function(d){
-      if (!groups[d.typeKey]) groups[d.typeKey] = [];
-      groups[d.typeKey].push(d.displayValue);
+    lastResults = activeDice.map(function(d){
       total += d.value;
+      return { typeKey: d.typeKey, value: d.value };
+    });
+    lastRawSum = total;
+    renderLedgerGroups();
+    document.getElementById('ledger').removeAttribute('hidden');
+    updateTotalDisplay();
+  }
+
+  function renderLedgerGroups(){
+    if (!lastResults) return;
+    var groups = {};
+    lastResults.forEach(function(r){
+      if (!groups[r.typeKey]) groups[r.typeKey] = [];
+      groups[r.typeKey].push(r.value);
     });
     var groupsEl = document.getElementById('ledgerGroups');
     groupsEl.innerHTML = '';
-    DIE_ORDER.forEach(function(typeKey){
-      if (!groups[typeKey]) return;
+    orderedTypeKeys(groups).forEach(function(typeKey){
       var cfg = DIE_TYPES[typeKey];
       var wrap = document.createElement('div');
       wrap.className = 'ledger-group';
@@ -811,14 +1194,33 @@
       groups[typeKey].forEach(function(v){
         var pill = document.createElement('span');
         pill.className = 'val-pill';
-        pill.textContent = v;
+        pill.textContent = String(v);
         vals.appendChild(pill);
       });
       wrap.appendChild(vals);
       groupsEl.appendChild(wrap);
     });
-    document.getElementById('ledgerTotal').innerHTML = '<span>Sum of the Pot</span>' + total;
-    document.getElementById('ledger').removeAttribute('hidden');
+  }
+
+  function updateTotalDisplay(){
+    if (lastRawSum === null) return;
+    var totalEl = document.getElementById('ledgerTotal');
+    var mult = parseFloat(document.getElementById('multiplierInput').value);
+    var mod = parseFloat(document.getElementById('modifierInput').value);
+    if (isNaN(mult) || mult <= 0) mult = 1;
+    if (isNaN(mod)) mod = 0;
+    var final = lastRawSum * mult + mod;
+    var finalRounded = Math.round(final * 100) / 100;
+    var label = THEMES[currentTheme].terms.totalLabel;
+    if (mult === 1 && mod === 0){
+      totalEl.innerHTML = '<span>' + label + '</span>' + lastRawSum;
+    } else {
+      var parts = lastRawSum;
+      if (mult !== 1) parts += ' \u00d7 ' + mult;
+      if (mod !== 0) parts += (mod > 0 ? ' + ' : ' \u2212 ') + Math.abs(mod);
+      totalEl.innerHTML = '<span>' + label + '</span>' + finalRounded +
+        '<div class="ledger-breakdown">' + parts + ' = ' + finalRounded + '</div>';
+    }
   }
 
   /* ============ Animation loop ============ */
@@ -829,6 +1231,29 @@
       if (a.done) return;
       if (now < a.startTime){ return; }
       var t = Math.min(1, (now - a.startTime) / a.duration);
+
+      if (a.style === 'roll'){
+        var moveT = Math.min(1, t / a.rollFrac);
+        var movedEased = easeOutCubic(moveT);
+        d.group.position.lerpVectors(a.startPos, a.restPos, movedEased);
+        d.shadow.position.set(d.group.position.x, 0.02, d.group.position.z);
+
+        if (t < a.rollFrac){
+          var spinAngle = a.totalSpinAngle * (t / a.rollFrac);
+          d.group.quaternion.setFromAxisAngle(a.rollAxis, spinAngle);
+        } else {
+          var settleT = (t - a.rollFrac) / (1 - a.rollFrac);
+          d.group.quaternion.slerpQuaternions(a.rollEndQuat, a.finalQuat, easeOutBack(Math.max(0,Math.min(1,settleT))));
+        }
+
+        if (t >= 1){
+          a.done = true;
+          d.group.position.copy(a.restPos);
+          d.group.quaternion.copy(a.finalQuat);
+          d.shadow.position.set(a.restPos.x, 0.02, a.restPos.z);
+        }
+        return;
+      }
 
       var segCount = a.waypoints.length - 1;
       var scaled = t * segCount;
@@ -879,6 +1304,37 @@
     dieGrid.appendChild(btn);
   });
 
+  var customBtn = document.createElement('div');
+  customBtn.className = 'die-btn custom-die-btn';
+  customBtn.tabIndex = 0;
+  customBtn.setAttribute('role', 'button');
+  customBtn.style.setProperty('--accent', CUSTOM_HEX);
+  customBtn.innerHTML =
+    '<svg viewBox="0 0 32 32"><polygon class="die-icon-stroke" points="16,3 27,10 27,22 16,29 5,22 5,10" fill="none" stroke="#a99fc4" stroke-width="1.6" stroke-linejoin="round"/></svg>' +
+    '<span>Custom</span>' +
+    '<input type="number" id="customSidesInput" min="4" max="100" value="7" aria-label="Number of sides for custom die" />';
+  dieGrid.appendChild(customBtn);
+  var customSidesInput = customBtn.querySelector('#customSidesInput');
+
+  function selectCustom(){
+    var n = Math.max(4, Math.min(100, parseInt(customSidesInput.value,10) || 4));
+    customSidesInput.value = n;
+    selectedType = ensureCustomDieType(n);
+    Array.prototype.forEach.call(dieGrid.children, function(c){ c.classList.remove('selected'); });
+    customBtn.classList.add('selected');
+  }
+  customBtn.addEventListener('click', function(e){
+    if (e.target === customSidesInput) return;
+    selectCustom();
+  });
+  customBtn.addEventListener('keydown', function(e){
+    if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); selectCustom(); }
+  });
+  customSidesInput.addEventListener('click', function(e){ e.stopPropagation(); });
+  customSidesInput.addEventListener('change', function(){
+    if (customBtn.classList.contains('selected')) selectCustom();
+  });
+
   var qtyInput = document.getElementById('qtyInput');
   document.getElementById('qtyMinus').addEventListener('click', function(){
     qtyInput.value = Math.max(1, (parseInt(qtyInput.value,10) || 1) - 1);
@@ -893,15 +1349,14 @@
     if (!potDice.length){
       var empty = document.createElement('li');
       empty.className = 'pot-empty';
-      empty.textContent = 'The pot is empty. Conjure a die above.';
+      empty.textContent = THEMES[currentTheme].terms.emptyPot;
       listEl.appendChild(empty);
       document.getElementById('castBtn').disabled = true;
       return;
     }
     var counts = {};
     potDice.forEach(function(item){ counts[item.typeKey] = (counts[item.typeKey]||0) + 1; });
-    DIE_ORDER.forEach(function(typeKey){
-      if (!counts[typeKey]) return;
+    orderedTypeKeys(counts).forEach(function(typeKey){
       var cfg = DIE_TYPES[typeKey];
       var chip = document.createElement('li');
       chip.className = 'chip';
@@ -936,19 +1391,381 @@
 
   document.getElementById('castBtn').addEventListener('click', castPot);
 
-  /* ============ Rune ticks for outer ring ============ */
-  var tickGroup = document.getElementById('tickGroup');
-  for (var i=0;i<16;i++){
-    var ang = (i / 16) * Math.PI * 2;
-    var r1 = 92, r2 = 86;
-    var x1 = 100 + Math.cos(ang)*r1, y1 = 100 + Math.sin(ang)*r1;
-    var x2 = 100 + Math.cos(ang)*r2, y2 = 100 + Math.sin(ang)*r2;
-    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
-    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
-    tickGroup.appendChild(line);
+  /* ============ Themes ============ */
+  var THEMES = {
+    arcane: {
+      terms: {
+        eyebrow: 'A Ritual Implement', title: 'Dicey',
+        tagline: 'Conjure dice into the pot, then cast them upon the circle and let fate settle.',
+        sceneHint: 'The Pot Awaits', conjureHeading: 'Conjure a Die', potHeading: 'The Pot',
+        emptyPot: 'The pot is empty. Conjure a die above.',
+        castLabel: 'Cast the Pot', clearLabel: 'Empty Pot', addLabel: '+ Add to Pot',
+        ledgerHeading: 'The Reading', totalLabel: 'Sum of the Pot', advancedHeading: 'Advanced',
+        footer: 'Choose a standard die, or set any number of sides (4–100) with the custom die tile.'
+      },
+      light: { hemiSky:0x8a7dff, hemiGround:0x0b0912, key:0xffe9c2, rim:0x8b6bff, fill:0xd8b25c },
+      material: { metalness:0.22, roughness:0.32, clearcoat:0.55, clearcoatRoughness:0.28, emissiveIntensity:0.05 }
+    },
+    steampunk: {
+      terms: {
+        eyebrow: 'A Clockwork Contraption', title: 'Dicey',
+        tagline: 'Load the hopper with gears and cogs, then wind the mechanism and let it roll.',
+        sceneHint: 'The Hopper Awaits', conjureHeading: 'Forge a Die', potHeading: 'The Hopper',
+        emptyPot: 'The hopper is empty. Forge a die above.',
+        castLabel: 'Engage the Mechanism', clearLabel: 'Empty Hopper', addLabel: '+ Load Hopper',
+        ledgerHeading: 'The Gauge Readout', totalLabel: 'Total Pressure', advancedHeading: 'Engineering',
+        footer: 'Choose a standard die, or forge one with any number of sides (4–100).'
+      },
+      light: { hemiSky:0xc9995a, hemiGround:0x160f09, key:0xffcf9a, rim:0xc98a3a, fill:0xa8532a },
+      material: { metalness:0.75, roughness:0.35, clearcoat:0.25, clearcoatRoughness:0.4, emissiveIntensity:0.03 }
+    },
+    scifi: {
+      terms: {
+        eyebrow: 'A Calibration Array', title: 'Dicey',
+        tagline: 'Queue dice into the buffer, then initiate the roll sequence and read the output.',
+        sceneHint: 'Buffer Standing By', conjureHeading: 'Fabricate a Die', potHeading: 'The Buffer',
+        emptyPot: 'The buffer is empty. Fabricate a die above.',
+        castLabel: 'Initiate Roll', clearLabel: 'Purge Buffer', addLabel: '+ Queue Die',
+        ledgerHeading: 'Diagnostic Report', totalLabel: 'Aggregate Output', advancedHeading: 'Systems',
+        footer: 'Choose a standard die, or fabricate one with any number of sides (4–100).'
+      },
+      light: { hemiSky:0x38d6ff, hemiGround:0x050a12, key:0xbfefff, rim:0x7b5cff, fill:0x38d6ff },
+      material: { metalness:0.4, roughness:0.18, clearcoat:0.9, clearcoatRoughness:0.08, emissiveIntensity:0.16 }
+    },
+    nature: {
+      terms: {
+        eyebrow: 'A Grove Offering', title: 'Dicey',
+        tagline: 'Gather seeds into the basket, then scatter them on the grove floor and read the growth.',
+        sceneHint: 'The Basket Awaits', conjureHeading: 'Gather a Seed', potHeading: 'The Basket',
+        emptyPot: 'The basket is empty. Gather a seed above.',
+        castLabel: 'Scatter the Seeds', clearLabel: 'Empty Basket', addLabel: '+ Gather Seed',
+        ledgerHeading: 'The Growth', totalLabel: 'Yield of the Basket', advancedHeading: 'Almanac',
+        footer: 'Choose a standard die, or grow one with any number of sides (4–100).'
+      },
+      light: { hemiSky:0xa3c15a, hemiGround:0x0e1a10, key:0xe8f0c0, rim:0x4a9a5c, fill:0xc8e070 },
+      material: { metalness:0.05, roughness:0.65, clearcoat:0.15, clearcoatRoughness:0.6, emissiveIntensity:0.04 }
+    }
+  };
+  var currentTheme = 'arcane';
+
+  function themeColor(varName){
+    return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || '#8b6bff';
   }
 
+  function buildRingSVG(themeKey){
+    var violet = themeColor('--violet'), gold = themeColor('--gold'), goldBright = themeColor('--gold-bright');
+    var outer = '', inner = '';
+    if (themeKey === 'steampunk'){
+      var teeth = '';
+      for (var i=0;i<24;i++){
+        var ang = (i/24)*Math.PI*2;
+        var r1=92, r2 = (i%2===0) ? 98 : 92;
+        var x1=100+Math.cos(ang)*r1, y1=100+Math.sin(ang)*r1;
+        var x2=100+Math.cos(ang)*r2, y2=100+Math.sin(ang)*r2;
+        teeth += '<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+gold+'" stroke-width="2"/>';
+      }
+      outer = '<circle cx="100" cy="100" r="92" fill="none" stroke="'+violet+'" stroke-width="1" opacity="0.5"/>' +
+        '<circle cx="100" cy="100" r="80" fill="none" stroke="'+gold+'" stroke-width="0.6" opacity="0.4"/>' + teeth;
+      var rivets = '';
+      for (var j=0;j<10;j++){
+        var a2=(j/10)*Math.PI*2;
+        rivets += '<circle cx="'+(100+Math.cos(a2)*72)+'" cy="'+(100+Math.sin(a2)*72)+'" r="2" fill="'+goldBright+'" opacity="0.55"/>';
+      }
+      inner = '<circle cx="100" cy="100" r="86" fill="none" stroke="'+goldBright+'" stroke-width="0.7" opacity="0.45"/>' +
+        '<circle cx="100" cy="100" r="60" fill="none" stroke="'+goldBright+'" stroke-width="0.5" opacity="0.3" stroke-dasharray="1 5"/>' + rivets;
+    } else if (themeKey === 'scifi'){
+      var segs = '';
+      for (var k=0;k<40;k++){
+        if (k % 3 === 0) continue;
+        var a3 = (k/40)*Math.PI*2;
+        var rr1=92, rr2=87;
+        segs += '<line x1="'+(100+Math.cos(a3)*rr1)+'" y1="'+(100+Math.sin(a3)*rr1)+'" x2="'+(100+Math.cos(a3)*rr2)+'" y2="'+(100+Math.sin(a3)*rr2)+'" stroke="'+gold+'" stroke-width="1"/>';
+      }
+      outer = '<circle cx="100" cy="100" r="92" fill="none" stroke="'+violet+'" stroke-width="0.6" opacity="0.45"/>' +
+        '<circle cx="100" cy="100" r="70" fill="none" stroke="'+gold+'" stroke-width="0.4" opacity="0.3" stroke-dasharray="4 4"/>' + segs;
+      var brackets = '';
+      [[14,14,0],[186,14,90],[186,186,180],[14,186,270]].forEach(function(c){
+        brackets += '<g transform="rotate('+c[2]+' '+c[0]+' '+c[1]+')"><path d="M '+(c[0]-10)+' '+(c[1])+' L '+(c[0]-10)+' '+(c[1]-10)+' L '+c[0]+' '+(c[1]-10)+'" fill="none" stroke="'+goldBright+'" stroke-width="1.5"/></g>';
+      });
+      inner = '<circle cx="100" cy="100" r="60" fill="none" stroke="'+goldBright+'" stroke-width="0.6" opacity="0.4"/>' + brackets;
+    } else if (themeKey === 'nature'){
+      var leaves = '';
+      for (var m=0;m<14;m++){
+        var a4=(m/14)*Math.PI*2;
+        var lx=100+Math.cos(a4)*89, ly=100+Math.sin(a4)*89;
+        leaves += '<ellipse cx="'+lx+'" cy="'+ly+'" rx="4" ry="1.6" transform="rotate('+(a4*180/Math.PI)+' '+lx+' '+ly+')" fill="none" stroke="'+gold+'" stroke-width="0.8" opacity="0.55"/>';
+      }
+      outer = '<circle cx="100" cy="100" r="92" fill="none" stroke="'+violet+'" stroke-width="0.6" opacity="0.45"/>' +
+        '<circle cx="100" cy="100" r="82" fill="none" stroke="'+gold+'" stroke-width="0.4" opacity="0.35"/>' + leaves;
+      inner = '<circle cx="100" cy="100" r="88" fill="none" stroke="'+goldBright+'" stroke-width="0.6" opacity="0.4"/>' +
+        '<circle cx="100" cy="100" r="58" fill="none" stroke="'+goldBright+'" stroke-width="0.5" opacity="0.3" stroke-dasharray="3 3"/>';
+    } else {
+      var ticks = '';
+      for (var n=0;n<16;n++){
+        var a5=(n/16)*Math.PI*2, r1b=92, r2b=86;
+        ticks += '<line x1="'+(100+Math.cos(a5)*r1b)+'" y1="'+(100+Math.sin(a5)*r1b)+'" x2="'+(100+Math.cos(a5)*r2b)+'" y2="'+(100+Math.sin(a5)*r2b)+'" stroke="'+violet+'" stroke-width="1" opacity="0.6"/>';
+      }
+      outer = '<circle cx="100" cy="100" r="92" fill="none" stroke="'+violet+'" stroke-width="0.6" opacity="0.5"/>' +
+        '<circle cx="100" cy="100" r="84" fill="none" stroke="'+gold+'" stroke-width="0.4" opacity="0.4"/>' + ticks +
+        '<polygon points="100,20 174,145 26,145" fill="none" stroke="'+gold+'" stroke-width="0.5" opacity="0.35"/>' +
+        '<polygon points="100,180 26,55 174,55" fill="none" stroke="'+violet+'" stroke-width="0.5" opacity="0.35"/>';
+      inner = '<circle cx="100" cy="100" r="90" fill="none" stroke="'+goldBright+'" stroke-width="0.7" opacity="0.5"/>' +
+        '<circle cx="100" cy="100" r="60" fill="none" stroke="'+goldBright+'" stroke-width="0.5" opacity="0.3" stroke-dasharray="2 4"/>';
+    }
+    document.getElementById('ringOuter').innerHTML = outer;
+    document.getElementById('ringInner').innerHTML = inner;
+  }
+
+  function applyTheme(themeKey){
+    if (!THEMES[themeKey]) themeKey = 'arcane';
+    currentTheme = themeKey;
+    document.documentElement.setAttribute('data-theme', themeKey === 'arcane' ? '' : themeKey);
+    var t = THEMES[themeKey].terms;
+    document.getElementById('eyebrowText').textContent = t.eyebrow;
+    document.getElementById('pageTitle').textContent = t.title;
+    document.getElementById('tagline').textContent = t.tagline;
+    document.getElementById('sceneHint').textContent = t.sceneHint;
+    document.getElementById('conjureHeading').textContent = t.conjureHeading;
+    document.getElementById('potHeading').textContent = t.potHeading;
+    document.getElementById('ledgerHeading').textContent = t.ledgerHeading;
+    document.getElementById('advancedHeading').textContent = t.advancedHeading;
+    document.getElementById('addBtn').textContent = t.addLabel;
+    document.getElementById('clearBtn').textContent = t.clearLabel;
+    document.getElementById('castBtn').textContent = t.castLabel;
+    document.getElementById('footerNote').textContent = t.footer;
+    document.title = t.title + ' \u00b7 ' + t.eyebrow;
+
+    // scene lighting mood
+    var lt = THEMES[themeKey].light;
+    hemi.color.setHex(lt.hemiSky); hemi.groundColor.setHex(lt.hemiGround);
+    key.color.setHex(lt.key); rim.color.setHex(lt.rim); fillLight.color.setHex(lt.fill);
+
+    // dice built under the old theme used the old material tweak; clear the cache so
+    // future casts pick up the new one (dice already on the table keep their look)
+    templateCache = {};
+
+    // ring decoration needs the freshly-applied CSS vars, so read them after the attribute swap
+    requestAnimationFrame(function(){ buildRingSVG(themeKey); });
+
+    renderPotList();
+  }
+
+  document.getElementById('themeSelect').addEventListener('change', function(e){
+    applyTheme(e.target.value);
+  });
+
+  /* ============ Numbered / Named mode ============ */
+  var currentMode = 'numbered';
+  var nameList = [];
+
+  function updateNamesHint(){
+    var hint = document.getElementById('namesHint');
+    hint.textContent = nameList.length
+      ? (nameList.length + ' name' + (nameList.length === 1 ? '' : 's') + ' ready.')
+      : 'Add at least two names, then draw.';
+    document.getElementById('drawBtn').disabled = nameList.length < 2;
+    syncDrawCountLimit();
+  }
+
+  function syncDrawCountLimit(){
+    var reroll = document.getElementById('rerollDuplicatesInput').checked;
+    var countInput = document.getElementById('drawCountInput');
+    if (reroll && nameList.length){
+      countInput.max = nameList.length;
+      if (parseInt(countInput.value, 10) > nameList.length) countInput.value = nameList.length;
+    } else {
+      countInput.max = 50;
+    }
+  }
+  document.getElementById('rerollDuplicatesInput').addEventListener('change', syncDrawCountLimit);
+
+  function applyModeVisibility(){
+    var isNamed = (currentMode === 'named');
+    document.getElementById('namesPanel').hidden = !isNamed;
+    document.getElementById('conjurePanel').hidden = isNamed;
+    document.getElementById('potPanel').hidden = isNamed;
+    document.getElementById('winnerPanel').hidden = !isNamed;
+    document.getElementById('advancedPanel').hidden = isNamed;
+    if (isNamed) document.getElementById('ledger').setAttribute('hidden', '');
+  }
+
+  document.getElementById('modeSelect').addEventListener('change', function(e){
+    currentMode = e.target.value;
+    applyModeVisibility();
+    updateNamesHint();
+  });
+
+  // sync with the select's actual value on load, in case the browser restored a
+  // previous selection (autofill/back-forward cache) independently of our default
+  currentMode = document.getElementById('modeSelect').value || 'numbered';
+  applyModeVisibility();
+
+  document.getElementById('namesInput').addEventListener('input', function(e){
+    nameList = e.target.value.split(/[,\n]/).map(function(s){ return s.trim(); }).filter(function(s){ return s.length > 0; });
+    updateNamesHint();
+  });
+  updateNamesHint();
+
+  /* ============ Draw the Winner (Named mode) ============ */
+  function drawWinner(){
+    if (nameList.length < 2) return;
+    var n = nameList.length;
+    var reroll = document.getElementById('rerollDuplicatesInput').checked;
+    var drawCount = Math.max(1, Math.min(50, parseInt(document.getElementById('drawCountInput').value, 10) || 1));
+    if (reroll) drawCount = Math.min(drawCount, n);
+    document.getElementById('drawCountInput').value = drawCount;
+    document.getElementById('drawBtn').disabled = true;
+
+    var winnerEl = document.getElementById('winnerReveal');
+    winnerEl.innerHTML = '';
+
+    clearActiveDice();
+    var typeKey = ensureCustomDieType(n);
+    var faces = getFaces(typeKey);
+
+    var faceIndices = [];
+    if (reroll){
+      var pool = faces.map(function(f, i){ return i; });
+      for (var i = pool.length - 1; i > 0; i--){
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+      }
+      faceIndices = pool.slice(0, drawCount);
+    } else {
+      for (var k = 0; k < drawCount; k++) faceIndices.push(Math.floor(Math.random() * faces.length));
+    }
+
+    var positions = packPositions(drawCount);
+    var maxDuration = 0;
+    var results = [];
+    var restY = 0.36;
+
+    faceIndices.forEach(function(faceIdx, idx){
+      var face = faces[faceIdx];
+      results.push(nameList[(face.value - 1 + n) % n]);
+
+      var tmpl = getTemplate(typeKey);
+      var group = tmpl.clone(true);
+      var pos = positions[idx];
+      var baseQuat = new THREE.Quaternion().setFromUnitVectors(face.normal.clone().normalize(), UP);
+      var yaw = new THREE.Quaternion().setFromAxisAngle(UP, Math.random()*Math.PI*2);
+      var finalQuat = yaw.multiply(baseQuat);
+
+      var rollAngle = Math.random()*Math.PI*2;
+      var rollDir = new THREE.Vector3(Math.cos(rollAngle), 0, Math.sin(rollAngle));
+      var rollAxis = new THREE.Vector3(-rollDir.z, 0, rollDir.x).normalize();
+      var rollDistance = 2.6 + Math.random()*0.6;
+      var startPos = new THREE.Vector3(pos.x - rollDir.x*rollDistance, restY, pos.z - rollDir.z*rollDistance);
+      var restPos = new THREE.Vector3(pos.x, restY, pos.z);
+      var rollFrac = REDUCED_MOTION ? 0.5 : 0.7;
+      var totalSpinAngle = (REDUCED_MOTION ? 1.5 : 3.5 + Math.random()) * Math.PI * 2;
+      var rollEndQuat = new THREE.Quaternion().setFromAxisAngle(rollAxis, totalSpinAngle);
+      var stagger = idx * (REDUCED_MOTION ? 30 : 75);
+      var duration = REDUCED_MOTION ? 320 : 1150;
+
+      group.position.copy(startPos);
+      group.quaternion.identity();
+      scene.add(group);
+      var shadow = makeShadowMesh();
+      shadow.position.set(startPos.x, 0.02, startPos.z);
+      scene.add(shadow);
+
+      activeDice.push({
+        id: uid(), typeKey: typeKey, group: group, shadow: shadow,
+        value: face.value, displayValue: String(face.value),
+        anim: {
+          style: 'roll', startPos: startPos, restPos: restPos,
+          rollAxis: rollAxis, totalSpinAngle: totalSpinAngle, rollEndQuat: rollEndQuat,
+          finalQuat: finalQuat, rollFrac: rollFrac,
+          startTime: performance.now() + stagger, duration: duration, done: false
+        }
+      });
+      maxDuration = Math.max(maxDuration, stagger + duration);
+    });
+
+    var circleField = document.getElementById('circleField');
+    circleField.classList.add('casting');
+
+    setTimeout(function(){
+      circleField.classList.remove('casting');
+      results.forEach(function(name, i){
+        var card = document.createElement('span');
+        card.className = 'winner-card';
+        card.style.setProperty('--stagger', (i * 110) + 'ms');
+        card.textContent = name;
+        winnerEl.appendChild(card);
+        void card.offsetWidth; // restart animation cleanly even on repeated draws
+        card.classList.add('revealed');
+      });
+      document.getElementById('drawBtn').disabled = (nameList.length < 2);
+    }, maxDuration + 150);
+  }
+  document.getElementById('drawBtn').addEventListener('click', drawWinner);
+
+  /* ============ Calculator ============ */
+  var calcDisplayEl = document.getElementById('calcDisplay');
+  var calcState = { display: '0', stored: null, pendingOp: null, waitingForOperand: false };
+
+  function calcRound(n){ return Math.round(n * 1e8) / 1e8; }
+  function calcCompute(a, b, op){
+    if (op === '+') return a + b;
+    if (op === '-') return a - b;
+    if (op === '*') return a * b;
+    if (op === '/') return b === 0 ? NaN : a / b;
+    return b;
+  }
+  function calcRender(){ calcDisplayEl.textContent = calcState.display; }
+  function calcInputDigit(d){
+    if (calcState.waitingForOperand){ calcState.display = d; calcState.waitingForOperand = false; }
+    else { calcState.display = calcState.display === '0' ? d : calcState.display + d; }
+    calcRender();
+  }
+  function calcInputDecimal(){
+    if (calcState.waitingForOperand){ calcState.display = '0.'; calcState.waitingForOperand = false; }
+    else if (calcState.display.indexOf('.') === -1){ calcState.display += '.'; }
+    calcRender();
+  }
+  function calcClear(){ calcState = { display:'0', stored:null, pendingOp:null, waitingForOperand:false }; calcRender(); }
+  function calcToggleSign(){ calcState.display = String(calcRound(parseFloat(calcState.display) * -1)); calcRender(); }
+  function calcPercent(){ calcState.display = String(calcRound(parseFloat(calcState.display) / 100)); calcRender(); }
+  function calcPerformOp(nextOp){
+    var inputValue = parseFloat(calcState.display);
+    if (isNaN(inputValue)) inputValue = 0;
+    if (calcState.stored === null){ calcState.stored = inputValue; }
+    else if (calcState.pendingOp){
+      var result = calcRound(calcCompute(calcState.stored, inputValue, calcState.pendingOp));
+      calcState.display = String(result);
+      calcState.stored = result;
+    }
+    calcState.pendingOp = nextOp === '=' ? null : nextOp;
+    calcState.waitingForOperand = true;
+    if (nextOp === '=') calcState.stored = null;
+    calcRender();
+  }
+  document.getElementById('calcGrid').addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-calc]');
+    if (!btn) return;
+    var v = btn.getAttribute('data-calc');
+    if (v === 'C') calcClear();
+    else if (v === '±') calcToggleSign();
+    else if (v === '%') calcPercent();
+    else if (v === '.') calcInputDecimal();
+    else if (v === '+' || v === '-' || v === '*' || v === '=' ) calcPerformOp(v);
+    else if (v === '/') calcPerformOp('/');
+    else calcInputDigit(v);
+  });
+  document.getElementById('calcToModifier').addEventListener('click', function(){
+    var val = parseFloat(calcState.display);
+    if (!isNaN(val)){
+      document.getElementById('modifierInput').value = calcRound(val);
+      updateTotalDisplay();
+    }
+  });
+
+  document.getElementById('multiplierInput').addEventListener('input', updateTotalDisplay);
+  document.getElementById('modifierInput').addEventListener('input', updateTotalDisplay);
+
+  applyTheme('arcane');
   renderPotList();
 })();
 </script>
