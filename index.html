@@ -445,6 +445,33 @@
     padding:12px 16px; margin-bottom:16px; display:flex; flex-direction:column; gap:6px;
   }
   .names-panel[hidden]{ display:none; }
+
+  .assign-details{ margin-top:12px; padding-top:10px; border-top:1px solid var(--edge); }
+  .assign-details summary{
+    font-family:var(--font-display); font-size:0.7rem; letter-spacing:0.14em;
+    text-transform:uppercase; color:var(--gold-bright);
+    cursor:pointer; list-style:none; display:flex; align-items:center; gap:10px;
+  }
+  .assign-details summary::-webkit-details-marker{ display:none; }
+  .assign-details summary::after{ content:'\25be'; margin-left:auto; color:var(--muted); transition: transform 0.2s ease; }
+  .assign-details[open] summary::after{ transform: rotate(180deg); }
+  .assign-body{ margin-top:10px; display:flex; flex-direction:column; gap:10px; }
+  .assign-rows{
+    display:flex; flex-direction:column; gap:6px; max-height:220px; overflow-y:auto;
+    padding-right:2px;
+  }
+  .assign-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background: rgba(255,255,255,0.02); border:1px solid var(--edge); border-radius:8px;
+    padding:6px 10px;
+  }
+  .assign-row span{ font-size:0.95rem; color:var(--parchment); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .assign-row input{
+    width:56px; flex:0 0 auto; background: rgba(255,255,255,0.03); border:1px solid var(--edge);
+    border-radius:7px; color:var(--parchment); font-family:var(--font-body); font-size:0.95rem;
+    text-align:center; padding:4px 2px;
+  }
+  .assign-warning{ font-size:0.82rem; color:var(--ember); font-style:italic; }
   .names-panel textarea{
     width:100%; resize:vertical; min-height:44px;
     background: rgba(255,255,255,0.03); border:1px solid var(--edge); border-radius:9px;
@@ -522,6 +549,18 @@
     <label for="namesInput" class="theme-label">Name the Faces</label>
     <textarea id="namesInput" rows="2" placeholder="Alice, Bob, Charlie, Dana…"></textarea>
     <div class="names-hint" id="namesHint">Add at least four names, then draw.</div>
+
+    <details class="assign-details" id="assignDetails">
+      <summary id="assignSummary">Advanced: Assign Numbers</summary>
+      <div class="assign-body">
+        <label class="checkbox-row" for="customAssignInput">
+          <input type="checkbox" id="customAssignInput" />
+          <span>Pin each name to a specific number</span>
+        </label>
+        <div class="assign-rows" id="assignRows"></div>
+        <div class="assign-warning" id="assignWarning" hidden></div>
+      </div>
+    </details>
   </div>
 
   <div class="masthead">
@@ -1578,6 +1617,8 @@
   /* ============ Numbered / Named mode ============ */
   var currentMode = 'numbered';
   var nameList = [];
+  var useCustomAssignment = false;
+  var customAssignments = {}; // name -> pinned face value (1-based)
 
   function updateNamesHint(){
     var hint = document.getElementById('namesHint');
@@ -1588,9 +1629,76 @@
     } else {
       hint.textContent = 'Add at least four names, then draw.';
     }
-    document.getElementById('drawBtn').disabled = nameList.length < 4;
     syncDrawCountLimit();
+    renderAssignmentRows();
   }
+
+  function renderAssignmentRows(){
+    var container = document.getElementById('assignRows');
+    container.innerHTML = '';
+    if (!useCustomAssignment || !nameList.length){
+      validateAssignments();
+      return;
+    }
+    var n = nameList.length;
+    var stillPresent = {};
+    nameList.forEach(function(nm){ stillPresent[nm] = true; });
+    Object.keys(customAssignments).forEach(function(nm){ if (!stillPresent[nm]) delete customAssignments[nm]; });
+
+    nameList.forEach(function(nm, i){
+      if (!(customAssignments[nm] >= 1 && customAssignments[nm] <= n)) customAssignments[nm] = i + 1;
+      var row = document.createElement('div');
+      row.className = 'assign-row';
+      var label = document.createElement('span');
+      label.textContent = nm;
+      var input = document.createElement('input');
+      input.type = 'number';
+      input.min = '1'; input.max = String(n); input.step = '1';
+      input.value = String(customAssignments[nm]);
+      input.addEventListener('input', function(){
+        var v = parseInt(input.value, 10);
+        customAssignments[nm] = isNaN(v) ? 0 : v;
+        validateAssignments();
+      });
+      row.appendChild(label);
+      row.appendChild(input);
+      container.appendChild(row);
+    });
+    validateAssignments();
+  }
+
+  function validateAssignments(){
+    var warning = document.getElementById('assignWarning');
+    var drawBtn = document.getElementById('drawBtn');
+    var lengthOk = nameList.length >= 4;
+
+    if (!useCustomAssignment){
+      warning.hidden = true;
+      drawBtn.disabled = !lengthOk;
+      return lengthOk;
+    }
+
+    var n = nameList.length;
+    var seen = {};
+    var problem = null;
+    nameList.forEach(function(nm){
+      if (problem) return;
+      var v = customAssignments[nm];
+      if (!(v >= 1 && v <= n)) problem = '"' + nm + '" needs a number from 1 to ' + n + '.';
+      else if (seen[v]) problem = '"' + nm + '" and "' + seen[v] + '" are both set to ' + v + '.';
+      else seen[v] = nm;
+    });
+    var valid = lengthOk && !problem;
+    warning.hidden = !problem;
+    if (problem) warning.textContent = problem;
+    drawBtn.disabled = !valid;
+    return valid;
+  }
+
+  document.getElementById('customAssignInput').addEventListener('change', function(e){
+    useCustomAssignment = e.target.checked;
+    renderAssignmentRows();
+  });
 
   function syncDrawCountLimit(){
     var reroll = document.getElementById('rerollDuplicatesInput').checked;
@@ -1633,7 +1741,7 @@
 
   /* ============ Draw the Winner (Named mode) ============ */
   function drawWinner(){
-    if (nameList.length < 4) return;
+    if (!validateAssignments()) return;
     var n = nameList.length;
     var reroll = document.getElementById('rerollDuplicatesInput').checked;
     var drawCount = Math.max(1, Math.min(50, parseInt(document.getElementById('drawCountInput').value, 10) || 1));
@@ -1647,6 +1755,15 @@
     clearActiveDice();
     var typeKey = ensureCustomDieType(n);
     var faces = getFaces(typeKey);
+
+    var valueToName = null;
+    if (useCustomAssignment){
+      valueToName = {};
+      nameList.forEach(function(nm){ valueToName[customAssignments[nm]] = nm; });
+    }
+    function nameForFaceValue(v){
+      return valueToName ? valueToName[v] : nameList[(v - 1 + n) % n];
+    }
 
     var faceIndices = [];
     if (reroll){
@@ -1667,7 +1784,7 @@
 
     faceIndices.forEach(function(faceIdx, idx){
       var face = faces[faceIdx];
-      results.push(nameList[(face.value - 1 + n) % n]);
+      results.push(nameForFaceValue(face.value));
 
       var tmpl = getTemplate(typeKey);
       var group = tmpl.clone(true);
@@ -1722,7 +1839,7 @@
         void card.offsetWidth; // restart animation cleanly even on repeated draws
         card.classList.add('revealed');
       });
-      document.getElementById('drawBtn').disabled = (nameList.length < 4);
+      validateAssignments();
     }, maxDuration + 150);
   }
   document.getElementById('drawBtn').addEventListener('click', drawWinner);
