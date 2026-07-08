@@ -67,4 +67,4 @@ open index.html
 
 ## License
 
-MIT — do whatever you want with it.
+GNU GENERAL PUBLIC LICENSE — do whatever you want with it.
